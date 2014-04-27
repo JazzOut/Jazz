@@ -2,7 +2,7 @@ Jazz
 ====
 
 The game itself
-=====
+=
 
 
 
