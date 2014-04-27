@@ -23,5 +23,7 @@ public class JazzCore extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(img, 0, 0);
 		batch.end();
+		
+		//test test
 	}
 }
