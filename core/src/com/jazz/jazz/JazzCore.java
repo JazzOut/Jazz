@@ -7,6 +7,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -18,8 +19,10 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -27,6 +30,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 public class JazzCore extends ApplicationAdapter {
 	public PerspectiveCamera cam;
@@ -49,10 +53,10 @@ public class JazzCore extends ApplicationAdapter {
 		
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		//cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.position.set(0f,0f,50f);
-		cam.lookAt(0,0,0);
+		cam.position.set(0f,100f,200f);
+		//cam.lookAt(0,0,0);
 		cam.near = 1f;
-		cam.far = 300f;
+		cam.far = 1000f;
 		cam.update();
 		
 		camController = new CameraInputController(cam);
@@ -75,6 +79,7 @@ public class JazzCore extends ApplicationAdapter {
 		def.position.set(new Vector2(0,0));
 		def.type = BodyType.DynamicBody;
 		
+		
 		//body = world.createBody(def);
 		FixtureDef fix = new FixtureDef();
 		fix.density = 10f;
@@ -92,7 +97,7 @@ public class JazzCore extends ApplicationAdapter {
 		for(i = 0; i < 1000; i++){
 			def.position.set(new Vector2(rnd.nextFloat()*5,2f*i));
 			//circ.setRadius(rnd.nextFloat());
-			box.setAsBox((1+rnd.nextFloat()*5)/1f, (1+rnd.nextFloat()*0)/1f);
+			box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
 			fix.shape = box;
 			world.createBody(def).createFixture(fix);
 		}
@@ -128,19 +133,34 @@ public class JazzCore extends ApplicationAdapter {
 
 		//Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		//Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
 		world.step(1/60f, 5, 2);
-		
-		
-		render.render(world, cam.combined);
-		
-		instance.transform.rotate(new Vector3(0,0,1), 1f);
-
-		instance.transform.setToTranslation(new Vector3(10,0,0));
-		
-		
+		Array<Body> bodies = new Array<Body>(); 
+		world.getBodies(bodies);
+		Vector3 pos = new Vector3();
+		Vector2 pos2D = new Vector2();
 		modelBatch.begin(cam);
-		modelBatch.render(instance, environment);
+		for(int i = 0; i<bodies.size; i++){
+			pos2D = bodies.get(i).getPosition();
+			pos.x = pos2D.x;
+			pos.y = pos2D.y;
+			pos.z = 0;
+
+			//instance.transform.setToRotation(new Vector3(0,0,1), bodies.get(i).getAngle() * MathUtils.radiansToDegrees).setToTranslation(pos);
+			instance.transform.setToTranslation(pos).rotate(new Vector3(0,0,1), bodies.get(i).getAngle() * MathUtils.radiansToDegrees);
+			modelBatch.render(instance, environment);
+		}
 		modelBatch.end();
+		//render.render(world, cam.combined);
+		
+		//instance.transform.rotate(new Vector3(0,0,1), 1f);
+
+	//	instance.transform.setToTranslation(new Vector3(10,0,0));
+		
+		
+
+		
+		
 	}
 	
 	@Override
