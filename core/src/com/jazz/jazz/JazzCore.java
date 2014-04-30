@@ -70,7 +70,7 @@ public class JazzCore extends ApplicationAdapter {
 		Body body;
 		ModelBuilder modelBuilder = new ModelBuilder();
 		sphere = modelBuilder.createSphere(20f, 20f, 20f, 20, 20, 
-				new Material(ColorAttribute.createDiffuse(Color.GREEN)), 
+				new Material(ColorAttribute.createDiffuse(Color.BLUE)), 
 						Usage.Position | Usage.Normal, 
 						0f, 360f, 0f, 360f);
 		model = modelBuilder.createBox(5f, 5f, 100f,
@@ -129,7 +129,7 @@ public class JazzCore extends ApplicationAdapter {
 		body = world.createBody(def);
 		body.createFixture(fix);
 		body.setUserData(instance);
-		//def.position.set(0, 40);
+		def.position.set(0, 40);
 		//world.createBody(def).createFixture(fix);
 		box.setAsBox(2, 10000);
 		def.angle = -10;
@@ -150,6 +150,8 @@ public class JazzCore extends ApplicationAdapter {
 	@Override
 	public void render () {
 		camController.update();
+		//world.setGravity(new Vector2(0+cam.direction.x*0, -10-cam.direction.y*100));
+		System.out.println(cam.direction);
 		//light.set(.8f,.8f,.8f,cam.direction.x,cam.direction.y,cam.direction.z);
 
 		//Gdx.gl.glClearColor(0, 0, 0, 1);
