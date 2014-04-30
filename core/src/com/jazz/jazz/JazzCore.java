@@ -7,7 +7,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -39,39 +38,46 @@ public class JazzCore extends ApplicationAdapter {
 	public Environment environment;
 	public ModelBatch modelBatch;
 	public Model model;
+	public Model sphere;
 	public ModelInstance instance;
+	public ModelInstance sphereInst;
 	public Box2DDebugRenderer render;
 	public World world;
+	public DirectionalLight light;
 	
 	@Override
 	public void create () {
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, .4f, .4f, .4f, 1f));
-		environment.add(new DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.2f));
+		light = new DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.2f);
+		environment.add(light);
+		//environment.add(new DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.2f));
+		
 		
 		modelBatch = new ModelBatch();
 		
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		//cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.position.set(0f,100f,200f);
+		cam.position.set(0f,100f,400f);
 		//cam.lookAt(0,0,0);
 		cam.near = 1f;
-		cam.far = 1000f;
+		cam.far = 5000f;
 		cam.update();
 		
 		camController = new CameraInputController(cam);
-		
+		camController.scrollFactor = -10;
 		Gdx.input.setInputProcessor(camController);
-		
+		Body body;
 		ModelBuilder modelBuilder = new ModelBuilder();
-		//model = modelBuilder.createSphere(5, 5, 5, 20, 20, 
-			//	new Material(ColorAttribute.createDiffuse(Color.GREEN)), 
-				//		Usage.Position | Usage.Normal, 
-					//	0f, 360f, 0f, 360f);
+		sphere = modelBuilder.createSphere(5f, 5f, 5f, 20, 20, 
+				new Material(ColorAttribute.createDiffuse(Color.BLUE)), 
+						Usage.Position | Usage.Normal, 
+						0f, 360f, 0f, 360f);
 		model = modelBuilder.createBox(5f, 5f, 5f,
 				new Material(ColorAttribute.createDiffuse(Color.GREEN)), 
 				Usage.Position | Usage.Normal);
 		instance = new ModelInstance(model);
+		sphereInst = new ModelInstance(sphere);
 		
 		world = new World(new Vector2(0,-10), true);
 		
@@ -83,8 +89,8 @@ public class JazzCore extends ApplicationAdapter {
 		//body = world.createBody(def);
 		FixtureDef fix = new FixtureDef();
 		fix.density = 10f;
-		fix.restitution = .1f;
-		fix.friction = 0f;
+		fix.restitution = 0f;
+		fix.friction = .5f;
 		
 		CircleShape circ = new CircleShape();
 		circ.setRadius(10f);
@@ -93,20 +99,34 @@ public class JazzCore extends ApplicationAdapter {
 		//body.createFixture(fix);
 		PolygonShape box = new PolygonShape();
 		Random rnd = new Random();
-		int i;
+		int i = 0;
 		for(i = 0; i < 1000; i++){
-			def.position.set(new Vector2(rnd.nextFloat()*5,2f*i));
-			//circ.setRadius(rnd.nextFloat());
-			box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
-			fix.shape = box;
-			world.createBody(def).createFixture(fix);
+			def.position.set(new Vector2(rnd.nextInt(120-5-2)-60+2,2f*i));
+			//circ.setRadius(2.5f);
+			//box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
+			body = world.createBody(def);
+			if(rnd.nextInt(2) ==1){
+				fix.shape = box;
+				fix.restitution = 0;
+				box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
+				body.setUserData(instance);
+			}else{
+				circ.setRadius(2.5f);
+				fix.shape = circ;
+				fix.restitution = 1;
+				body.setUserData(sphereInst);
+			}
+			body.createFixture(fix);
 		}
 		
 		fix.shape = circ;
-		fix.density =500f;
-		fix.restitution = 0f;
+		fix.density =50000f;
+		fix.restitution = 1f;
 		def.position.set(0, 2f*i + 100);
-		world.createBody(def).createFixture(fix);
+		body = world.createBody(def);
+		body.createFixture(fix);
+		body.setUserData(sphereInst);
+		
 		
 		def.type = BodyType.StaticBody;
 		def.position.set(new Vector2(0,-40));
@@ -115,14 +135,23 @@ public class JazzCore extends ApplicationAdapter {
 		fix.shape = box;
 		fix.restitution = 0;
 		
-		world.createBody(def).createFixture(fix);
-		//def.position.set(0, 40);
+		body = world.createBody(def);
+		body.createFixture(fix);
+		body.setUserData(instance);
+		def.position.set(0, 40);
 		//world.createBody(def).createFixture(fix);
 		box.setAsBox(2, 10000);
-		def.position.set(40, 0);
-		world.createBody(def).createFixture(fix);
-		def.position.set(-40, 0);
-		world.createBody(def).createFixture(fix);
+		//def.angle = -10;
+		def.position.set(60, 0);
+		body = world.createBody(def);
+		body.createFixture(fix);
+		body.setUserData(instance);
+		//def.angle = 10;
+		def.position.set(-60, 0);
+		body = world.createBody(def);
+		body.createFixture(fix);
+		body.setUserData(instance);
+		
 		
 		render = new Box2DDebugRenderer();
 	}
@@ -130,6 +159,9 @@ public class JazzCore extends ApplicationAdapter {
 	@Override
 	public void render () {
 		camController.update();
+		//world.setGravity(new Vector2(0+cam.direction.x*0, -10-cam.direction.y*100));
+		System.out.println(cam.direction);
+		//light.set(.8f,.8f,.8f,cam.direction.x,cam.direction.y,cam.direction.z);
 
 		//Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -140,16 +172,24 @@ public class JazzCore extends ApplicationAdapter {
 		Vector3 pos = new Vector3();
 		Vector2 pos2D = new Vector2();
 		modelBatch.begin(cam);
-		for(int i = 0; i<bodies.size; i++){
+		int i=0;
+
+		ModelInstance tmp;
+		for(i = 0; i<bodies.size; i++){
 			pos2D = bodies.get(i).getPosition();
+
+			//bodies.get(i).applyForceToCenter(force.x,force.y,true);
 			pos.x = pos2D.x;
 			pos.y = pos2D.y;
 			pos.z = 0;
-
+			tmp = (ModelInstance) bodies.get(i).getUserData();
 			//instance.transform.setToRotation(new Vector3(0,0,1), bodies.get(i).getAngle() * MathUtils.radiansToDegrees).setToTranslation(pos);
-			instance.transform.setToTranslation(pos).rotate(new Vector3(0,0,1), bodies.get(i).getAngle() * MathUtils.radiansToDegrees);
-			modelBatch.render(instance, environment);
+			if(tmp != null){
+				tmp.transform.setToTranslation(pos).rotate(new Vector3(0,0,1), bodies.get(i).getAngle() * MathUtils.radiansToDegrees);
+				modelBatch.render(tmp, environment);
+			}
 		}
+
 		modelBatch.end();
 		//render.render(world, cam.combined);
 		
@@ -167,5 +207,6 @@ public class JazzCore extends ApplicationAdapter {
 	public void dispose(){
 		modelBatch.dispose();
 		model.dispose();
+		sphere.dispose();
 	}
 }
