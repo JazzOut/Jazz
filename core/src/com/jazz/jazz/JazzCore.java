@@ -7,7 +7,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -39,7 +38,9 @@ public class JazzCore extends ApplicationAdapter {
 	public Environment environment;
 	public ModelBatch modelBatch;
 	public Model model;
+	public Model sphere;
 	public ModelInstance instance;
+	public ModelInstance sphereInst;
 	public Box2DDebugRenderer render;
 	public World world;
 	
@@ -62,16 +63,17 @@ public class JazzCore extends ApplicationAdapter {
 		camController = new CameraInputController(cam);
 		
 		Gdx.input.setInputProcessor(camController);
-		
+		Body body;
 		ModelBuilder modelBuilder = new ModelBuilder();
-		//model = modelBuilder.createSphere(5, 5, 5, 20, 20, 
-			//	new Material(ColorAttribute.createDiffuse(Color.GREEN)), 
-				//		Usage.Position | Usage.Normal, 
-					//	0f, 360f, 0f, 360f);
+		sphere = modelBuilder.createSphere(20, 20, 20, 20, 20, 
+				new Material(ColorAttribute.createDiffuse(Color.GREEN)), 
+						Usage.Position | Usage.Normal, 
+						0f, 360f, 0f, 360f);
 		model = modelBuilder.createBox(5f, 5f, 5f,
 				new Material(ColorAttribute.createDiffuse(Color.GREEN)), 
 				Usage.Position | Usage.Normal);
 		instance = new ModelInstance(model);
+		sphereInst = new ModelInstance(sphere);
 		
 		world = new World(new Vector2(0,-10), true);
 		
@@ -99,14 +101,19 @@ public class JazzCore extends ApplicationAdapter {
 			//circ.setRadius(rnd.nextFloat());
 			box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
 			fix.shape = box;
-			world.createBody(def).createFixture(fix);
+			body = world.createBody(def);
+			body.createFixture(fix);
+			body.setUserData(instance);
 		}
 		
 		fix.shape = circ;
 		fix.density =500f;
 		fix.restitution = 0f;
 		def.position.set(0, 2f*i + 100);
-		world.createBody(def).createFixture(fix);
+		body = world.createBody(def);
+		body.createFixture(fix);
+		body.setUserData(sphereInst);
+		
 		
 		def.type = BodyType.StaticBody;
 		def.position.set(new Vector2(0,-40));
@@ -115,14 +122,20 @@ public class JazzCore extends ApplicationAdapter {
 		fix.shape = box;
 		fix.restitution = 0;
 		
-		world.createBody(def).createFixture(fix);
+		body = world.createBody(def);
+		body.createFixture(fix);
+		body.setUserData(instance);
 		//def.position.set(0, 40);
 		//world.createBody(def).createFixture(fix);
 		box.setAsBox(2, 10000);
-		def.position.set(40, 0);
-		world.createBody(def).createFixture(fix);
-		def.position.set(-40, 0);
-		world.createBody(def).createFixture(fix);
+		def.position.set(60, 0);
+		body = world.createBody(def);
+		body.createFixture(fix);
+		body.setUserData(instance);
+		def.position.set(-60, 0);
+		body = world.createBody(def);
+		body.createFixture(fix);
+		body.setUserData(instance);
 		
 		render = new Box2DDebugRenderer();
 	}
@@ -140,16 +153,21 @@ public class JazzCore extends ApplicationAdapter {
 		Vector3 pos = new Vector3();
 		Vector2 pos2D = new Vector2();
 		modelBatch.begin(cam);
-		for(int i = 0; i<bodies.size; i++){
+		int i=0;
+		ModelInstance tmp;
+		for(i = 1; i<bodies.size; i++){
 			pos2D = bodies.get(i).getPosition();
 			pos.x = pos2D.x;
 			pos.y = pos2D.y;
 			pos.z = 0;
-
+			tmp = (ModelInstance) bodies.get(i).getUserData();
 			//instance.transform.setToRotation(new Vector3(0,0,1), bodies.get(i).getAngle() * MathUtils.radiansToDegrees).setToTranslation(pos);
-			instance.transform.setToTranslation(pos).rotate(new Vector3(0,0,1), bodies.get(i).getAngle() * MathUtils.radiansToDegrees);
-			modelBatch.render(instance, environment);
+			if(tmp != null){
+				tmp.transform.setToTranslation(pos).rotate(new Vector3(0,0,1), bodies.get(i).getAngle() * MathUtils.radiansToDegrees);
+				modelBatch.render(tmp, environment);
+			}
 		}
+
 		modelBatch.end();
 		//render.render(world, cam.combined);
 		
@@ -167,5 +185,6 @@ public class JazzCore extends ApplicationAdapter {
 	public void dispose(){
 		modelBatch.dispose();
 		model.dispose();
+		sphere.dispose();
 	}
 }
