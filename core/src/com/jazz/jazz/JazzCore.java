@@ -43,33 +43,37 @@ public class JazzCore extends ApplicationAdapter {
 	public ModelInstance sphereInst;
 	public Box2DDebugRenderer render;
 	public World world;
+	public DirectionalLight light;
 	
 	@Override
 	public void create () {
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, .4f, .4f, .4f, 1f));
-		environment.add(new DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.2f));
+		light = new DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.2f);
+		environment.add(light);
+		//environment.add(new DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.2f));
+		
 		
 		modelBatch = new ModelBatch();
 		
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		//cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.position.set(0f,100f,200f);
+		cam.position.set(0f,100f,400f);
 		//cam.lookAt(0,0,0);
 		cam.near = 1f;
-		cam.far = 1000f;
+		cam.far = 5000f;
 		cam.update();
 		
 		camController = new CameraInputController(cam);
-		
+		camController.scrollFactor = -10;
 		Gdx.input.setInputProcessor(camController);
 		Body body;
 		ModelBuilder modelBuilder = new ModelBuilder();
-		sphere = modelBuilder.createSphere(20, 20, 20, 20, 20, 
+		sphere = modelBuilder.createSphere(20f, 20f, 20f, 20, 20, 
 				new Material(ColorAttribute.createDiffuse(Color.GREEN)), 
 						Usage.Position | Usage.Normal, 
 						0f, 360f, 0f, 360f);
-		model = modelBuilder.createBox(5f, 5f, 5f,
+		model = modelBuilder.createBox(5f, 5f, 100f,
 				new Material(ColorAttribute.createDiffuse(Color.GREEN)), 
 				Usage.Position | Usage.Normal);
 		instance = new ModelInstance(model);
@@ -85,8 +89,8 @@ public class JazzCore extends ApplicationAdapter {
 		//body = world.createBody(def);
 		FixtureDef fix = new FixtureDef();
 		fix.density = 10f;
-		fix.restitution = .1f;
-		fix.friction = 0f;
+		fix.restitution = 0f;
+		fix.friction = 1f;
 		
 		CircleShape circ = new CircleShape();
 		circ.setRadius(10f);
@@ -95,10 +99,10 @@ public class JazzCore extends ApplicationAdapter {
 		//body.createFixture(fix);
 		PolygonShape box = new PolygonShape();
 		Random rnd = new Random();
-		int i;
-		for(i = 0; i < 1000; i++){
-			def.position.set(new Vector2(rnd.nextFloat()*5,2f*i));
-			//circ.setRadius(rnd.nextFloat());
+		int i = 0;
+		for(i = 0; i < 2500; i++){
+			def.position.set(new Vector2(rnd.nextInt(120-5-2)-60+2,2f*i));
+			//circ.setRadius(2.5f);
 			box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
 			fix.shape = box;
 			body = world.createBody(def);
@@ -107,7 +111,7 @@ public class JazzCore extends ApplicationAdapter {
 		}
 		
 		fix.shape = circ;
-		fix.density =500f;
+		fix.density =50000f;
 		fix.restitution = 0f;
 		def.position.set(0, 2f*i + 100);
 		body = world.createBody(def);
@@ -128,14 +132,17 @@ public class JazzCore extends ApplicationAdapter {
 		//def.position.set(0, 40);
 		//world.createBody(def).createFixture(fix);
 		box.setAsBox(2, 10000);
+		def.angle = -10;
 		def.position.set(60, 0);
 		body = world.createBody(def);
 		body.createFixture(fix);
 		body.setUserData(instance);
+		def.angle = 10;
 		def.position.set(-60, 0);
 		body = world.createBody(def);
 		body.createFixture(fix);
 		body.setUserData(instance);
+		
 		
 		render = new Box2DDebugRenderer();
 	}
@@ -143,6 +150,7 @@ public class JazzCore extends ApplicationAdapter {
 	@Override
 	public void render () {
 		camController.update();
+		//light.set(.8f,.8f,.8f,cam.direction.x,cam.direction.y,cam.direction.z);
 
 		//Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -154,9 +162,12 @@ public class JazzCore extends ApplicationAdapter {
 		Vector2 pos2D = new Vector2();
 		modelBatch.begin(cam);
 		int i=0;
+
 		ModelInstance tmp;
-		for(i = 1; i<bodies.size; i++){
+		for(i = 0; i<bodies.size; i++){
 			pos2D = bodies.get(i).getPosition();
+
+			//bodies.get(i).applyForceToCenter(force.x,force.y,true);
 			pos.x = pos2D.x;
 			pos.y = pos2D.y;
 			pos.z = 0;
@@ -169,7 +180,7 @@ public class JazzCore extends ApplicationAdapter {
 		}
 
 		modelBatch.end();
-		//render.render(world, cam.combined);
+		render.render(world, cam.combined);
 		
 		//instance.transform.rotate(new Vector3(0,0,1), 1f);
 
