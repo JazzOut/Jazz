@@ -69,11 +69,11 @@ public class JazzCore extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(camController);
 		Body body;
 		ModelBuilder modelBuilder = new ModelBuilder();
-		sphere = modelBuilder.createSphere(20f, 20f, 20f, 20, 20, 
+		sphere = modelBuilder.createSphere(5f, 5f, 5f, 20, 20, 
 				new Material(ColorAttribute.createDiffuse(Color.BLUE)), 
 						Usage.Position | Usage.Normal, 
 						0f, 360f, 0f, 360f);
-		model = modelBuilder.createBox(5f, 5f, 100f,
+		model = modelBuilder.createBox(5f, 5f, 5f,
 				new Material(ColorAttribute.createDiffuse(Color.GREEN)), 
 				Usage.Position | Usage.Normal);
 		instance = new ModelInstance(model);
@@ -90,7 +90,7 @@ public class JazzCore extends ApplicationAdapter {
 		FixtureDef fix = new FixtureDef();
 		fix.density = 10f;
 		fix.restitution = 0f;
-		fix.friction = 1f;
+		fix.friction = .5f;
 		
 		CircleShape circ = new CircleShape();
 		circ.setRadius(10f);
@@ -100,19 +100,28 @@ public class JazzCore extends ApplicationAdapter {
 		PolygonShape box = new PolygonShape();
 		Random rnd = new Random();
 		int i = 0;
-		for(i = 0; i < 2500; i++){
+		for(i = 0; i < 1000; i++){
 			def.position.set(new Vector2(rnd.nextInt(120-5-2)-60+2,2f*i));
 			//circ.setRadius(2.5f);
-			box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
-			fix.shape = box;
+			//box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
 			body = world.createBody(def);
+			if(rnd.nextInt(2) ==1){
+				fix.shape = box;
+				fix.restitution = 0;
+				box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
+				body.setUserData(instance);
+			}else{
+				circ.setRadius(2.5f);
+				fix.shape = circ;
+				fix.restitution = 1;
+				body.setUserData(sphereInst);
+			}
 			body.createFixture(fix);
-			body.setUserData(instance);
 		}
 		
 		fix.shape = circ;
 		fix.density =50000f;
-		fix.restitution = 0f;
+		fix.restitution = 1f;
 		def.position.set(0, 2f*i + 100);
 		body = world.createBody(def);
 		body.createFixture(fix);
@@ -132,12 +141,12 @@ public class JazzCore extends ApplicationAdapter {
 		def.position.set(0, 40);
 		//world.createBody(def).createFixture(fix);
 		box.setAsBox(2, 10000);
-		def.angle = -10;
+		//def.angle = -10;
 		def.position.set(60, 0);
 		body = world.createBody(def);
 		body.createFixture(fix);
 		body.setUserData(instance);
-		def.angle = 10;
+		//def.angle = 10;
 		def.position.set(-60, 0);
 		body = world.createBody(def);
 		body.createFixture(fix);
@@ -182,7 +191,7 @@ public class JazzCore extends ApplicationAdapter {
 		}
 
 		modelBatch.end();
-		render.render(world, cam.combined);
+		//render.render(world, cam.combined);
 		
 		//instance.transform.rotate(new Vector3(0,0,1), 1f);
 
