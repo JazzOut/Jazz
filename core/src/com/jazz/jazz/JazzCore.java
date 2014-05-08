@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -44,6 +45,7 @@ public class JazzCore extends ApplicationAdapter {
 	public Box2DDebugRenderer render;
 	public World world;
 	public DirectionalLight light;
+	ParticleEffect particle;
 	
 	@Override
 	public void create () {
@@ -55,6 +57,8 @@ public class JazzCore extends ApplicationAdapter {
 		
 		
 		modelBatch = new ModelBatch();
+		
+		
 		
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		//cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -80,6 +84,7 @@ public class JazzCore extends ApplicationAdapter {
 		sphereInst = new ModelInstance(sphere);
 		
 		world = new World(new Vector2(0,-10), true);
+		world.setContactListener(new GameCollision());
 		
 		BodyDef def = new BodyDef();
 		def.position.set(new Vector2(0,0));
@@ -90,7 +95,7 @@ public class JazzCore extends ApplicationAdapter {
 		FixtureDef fix = new FixtureDef();
 		fix.density = 10f;
 		fix.restitution = 0f;
-		fix.friction = .5f;
+		fix.friction = 1f;
 		
 		CircleShape circ = new CircleShape();
 		circ.setRadius(10f);
@@ -100,7 +105,7 @@ public class JazzCore extends ApplicationAdapter {
 		PolygonShape box = new PolygonShape();
 		Random rnd = new Random();
 		int i = 0;
-		for(i = 0; i < 1000; i++){
+		for(i = 0; i < 500; i++){
 			def.position.set(new Vector2(rnd.nextInt(120-5-2)-60+2,2f*i));
 			//circ.setRadius(2.5f);
 			//box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
@@ -122,7 +127,7 @@ public class JazzCore extends ApplicationAdapter {
 		fix.shape = circ;
 		fix.density =50000f;
 		fix.restitution = 1f;
-		def.position.set(0, 2f*i + 100);
+		def.position.set(0, 2f*i + 10);
 		body = world.createBody(def);
 		body.createFixture(fix);
 		body.setUserData(sphereInst);
@@ -159,11 +164,8 @@ public class JazzCore extends ApplicationAdapter {
 	@Override
 	public void render () {
 		camController.update();
-		//world.setGravity(new Vector2(0+cam.direction.x*0, -10-cam.direction.y*100));
-		System.out.println(cam.direction);
-		//light.set(.8f,.8f,.8f,cam.direction.x,cam.direction.y,cam.direction.z);
 
-		//Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		//Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
 		world.step(1/60f, 5, 2);
@@ -179,6 +181,7 @@ public class JazzCore extends ApplicationAdapter {
 			pos2D = bodies.get(i).getPosition();
 
 			//bodies.get(i).applyForceToCenter(force.x,force.y,true);
+			//bodies.get(i).applyAngularImpulse(1000, true);
 			pos.x = pos2D.x;
 			pos.y = pos2D.y;
 			pos.z = 0;

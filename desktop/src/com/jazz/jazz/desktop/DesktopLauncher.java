@@ -10,5 +10,6 @@ public class DesktopLauncher {
 		new LwjglApplication(new JazzCore(), config);
 		
 		//testests
+	
 	}
 }
