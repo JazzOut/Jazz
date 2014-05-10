@@ -15,10 +15,16 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.model.NodePart;
+import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -34,11 +40,14 @@ import com.badlogic.gdx.utils.Array;
 
 public class JazzCore extends ApplicationAdapter {
 	public PerspectiveCamera cam;
-	//public OrthographicCamera cam;
+	// public OrthographicCamera cam;
 	public CameraInputController camController;
 	public Environment environment;
 	public ModelBatch modelBatch;
 	public Model model;
+	public Renderable renderable;
+	public Shader shader;
+	public RenderContext renderContext;
 	public Model sphere;
 	public ModelInstance instance;
 	public ModelInstance sphereInst;
@@ -46,76 +55,98 @@ public class JazzCore extends ApplicationAdapter {
 	public World world;
 	public DirectionalLight light;
 	ParticleEffect particle;
-	
+
 	@Override
-	public void create () {
+	public void create() {
 		environment = new Environment();
-		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, .4f, .4f, .4f, 1f));
-		light = new DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.2f);
+		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, .4f,
+				.4f, .4f, 1f));
+		light = new DirectionalLight().set(.8f, .8f, .8f, -1f, -.8f, -.2f);
 		environment.add(light);
-		//environment.add(new DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.2f));
-		
-		
+		// environment.add(new
+		// DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.2f));
+
 		modelBatch = new ModelBatch();
-		
-		
-		
-		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		//cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.position.set(0f,100f,400f);
-		//cam.lookAt(0,0,0);
+
+		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
+		// cam = new OrthographicCamera(Gdx.graphics.getWidth(),
+		// Gdx.graphics.getHeight());
+		cam.position.set(0f, 100f, 400f);
+		// cam.lookAt(0,0,0);
 		cam.near = 1f;
 		cam.far = 5000f;
 		cam.update();
-		
+
 		camController = new CameraInputController(cam);
 		camController.scrollFactor = -10;
 		Gdx.input.setInputProcessor(camController);
 		Body body;
 		ModelBuilder modelBuilder = new ModelBuilder();
-		sphere = modelBuilder.createSphere(5f, 5f, 5f, 20, 20, 
-				new Material(ColorAttribute.createDiffuse(Color.BLUE)), 
-						Usage.Position | Usage.Normal, 
-						0f, 360f, 0f, 360f);
+		sphere = modelBuilder.createSphere(5f, 5f, 5f, 20, 20, new Material(
+				ColorAttribute.createDiffuse(Color.BLUE)), Usage.Position
+				| Usage.Normal, 0f, 360f, 0f, 360f);
 		model = modelBuilder.createBox(5f, 5f, 5f,
-				new Material(ColorAttribute.createDiffuse(Color.GREEN)), 
-				Usage.Position | Usage.Normal);
+				new Material(),
+				Usage.Position | Usage.Normal | Usage.TextureCoordinates);
 		instance = new ModelInstance(model);
 		sphereInst = new ModelInstance(sphere);
 		
-		world = new World(new Vector2(0,-10), true);
+		
+
+		renderable = new Renderable();
+
+		NodePart blockpart = model.nodes.get(0).parts.get(0);
+		blockpart.setRenderable(renderable);
+		renderable.environment = null;
+		renderable.worldTransform.idt();
+		shader = new DefaultShader(renderable);
+
+		renderContext = new RenderContext(new DefaultTextureBinder(
+				DefaultTextureBinder.WEIGHTED, 1));
+		shader = new DefaultShader(renderable);
+		
+		String vert = Gdx.files.internal("test.vertex.glsl").readString();
+	    String frag = Gdx.files.internal("test.fragment.glsl").readString();
+	    shader = new DefaultShader(renderable, new DefaultShader.Config(vert, frag));
+	    
+		shader.init();
+
+		world = new World(new Vector2(0, -10), true);
 		world.setContactListener(new GameCollision());
-		
+
 		BodyDef def = new BodyDef();
-		def.position.set(new Vector2(0,0));
+		def.position.set(new Vector2(0, 0));
 		def.type = BodyType.DynamicBody;
-		
-		
-		//body = world.createBody(def);
+
+		// body = world.createBody(def);
 		FixtureDef fix = new FixtureDef();
 		fix.density = 10f;
 		fix.restitution = 0f;
 		fix.friction = 1f;
-		
+
 		CircleShape circ = new CircleShape();
 		circ.setRadius(10f);
 		fix.shape = circ;
-		
-		//body.createFixture(fix);
+
+		// body.createFixture(fix);
 		PolygonShape box = new PolygonShape();
 		Random rnd = new Random();
 		int i = 0;
-		for(i = 0; i < 500; i++){
-			def.position.set(new Vector2(rnd.nextInt(120-5-2)-60+2,2f*i));
-			//circ.setRadius(2.5f);
-			//box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
+		for (i = 0; i < 500; i++) {
+			def.position.set(new Vector2(rnd.nextInt(120 - 5 - 2) - 60 + 2,
+					2f * i));
+			// circ.setRadius(2.5f);
+			// box.setAsBox((2.5f+rnd.nextFloat()*0)/1f,
+			// (2.5f+rnd.nextFloat()*0)/1f);
 			body = world.createBody(def);
-			if(rnd.nextInt(2) ==1){
+			if (rnd.nextInt(2) == 1) {
 				fix.shape = box;
 				fix.restitution = 0;
-				box.setAsBox((2.5f+rnd.nextFloat()*0)/1f, (2.5f+rnd.nextFloat()*0)/1f);
-				body.setUserData(instance);
-			}else{
+				box.setAsBox((2.5f + rnd.nextFloat() * 0) / 1f,
+						(2.5f + rnd.nextFloat() * 0) / 1f);
+				body.setUserData(renderable);
+			} else {
 				circ.setRadius(2.5f);
 				fix.shape = circ;
 				fix.restitution = 1;
@@ -123,93 +154,105 @@ public class JazzCore extends ApplicationAdapter {
 			}
 			body.createFixture(fix);
 		}
-		
+
 		fix.shape = circ;
-		fix.density =50000f;
+		fix.density = 50000f;
 		fix.restitution = 1f;
-		def.position.set(0, 2f*i + 10);
+		def.position.set(0, 2f * i + 10);
 		body = world.createBody(def);
 		body.createFixture(fix);
 		body.setUserData(sphereInst);
-		
-		
+
 		def.type = BodyType.StaticBody;
-		def.position.set(new Vector2(0,-40));
-		//PolygonShape box = new PolygonShape();
+		def.position.set(new Vector2(0, -40));
+		// PolygonShape box = new PolygonShape();
 		box.setAsBox(100, 10);
 		fix.shape = box;
 		fix.restitution = 0;
-		
+
 		body = world.createBody(def);
 		body.createFixture(fix);
 		body.setUserData(instance);
 		def.position.set(0, 40);
-		//world.createBody(def).createFixture(fix);
+		// world.createBody(def).createFixture(fix);
 		box.setAsBox(2, 10000);
-		//def.angle = -10;
+		// def.angle = -10;
 		def.position.set(60, 0);
 		body = world.createBody(def);
 		body.createFixture(fix);
 		body.setUserData(instance);
-		//def.angle = 10;
+		// def.angle = 10;
 		def.position.set(-60, 0);
 		body = world.createBody(def);
 		body.createFixture(fix);
 		body.setUserData(instance);
-		
-		
+
 		render = new Box2DDebugRenderer();
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 		camController.update();
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		//Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
-		world.step(1/60f, 5, 2);
-		Array<Body> bodies = new Array<Body>(); 
+		// Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
+		world.step(1 / 60f, 5, 2);
+		Array<Body> bodies = new Array<Body>();
 		world.getBodies(bodies);
 		Vector3 pos = new Vector3();
 		Vector2 pos2D = new Vector2();
 		modelBatch.begin(cam);
-		int i=0;
+		renderContext.begin();
+		shader.begin(cam, renderContext);
+		int i = 0;
 
-		ModelInstance tmp;
-		for(i = 0; i<bodies.size; i++){
+		Object tmp;
+		for (i = 0; i < bodies.size; i++) {
 			pos2D = bodies.get(i).getPosition();
 
-			//bodies.get(i).applyForceToCenter(force.x,force.y,true);
-			//bodies.get(i).applyAngularImpulse(1000, true);
+			// bodies.get(i).applyForceToCenter(force.x,force.y,true);
+			// bodies.get(i).applyAngularImpulse(1000, true);
 			pos.x = pos2D.x;
 			pos.y = pos2D.y;
 			pos.z = 0;
-			tmp = (ModelInstance) bodies.get(i).getUserData();
-			//instance.transform.setToRotation(new Vector3(0,0,1), bodies.get(i).getAngle() * MathUtils.radiansToDegrees).setToTranslation(pos);
-			if(tmp != null){
-				tmp.transform.setToTranslation(pos).rotate(new Vector3(0,0,1), bodies.get(i).getAngle() * MathUtils.radiansToDegrees);
-				modelBatch.render(tmp, environment);
+			tmp = bodies.get(i).getUserData();
+			// instance.transform.setToRotation(new Vector3(0,0,1),
+			// bodies.get(i).getAngle() *
+			// MathUtils.radiansToDegrees).setToTranslation(pos);
+			if (tmp != null) {
+				
+				if(tmp instanceof Renderable){
+				
+					((Renderable) tmp).worldTransform.setToTranslation(pos).rotate(
+							new Vector3(0, 0, 1),
+							bodies.get(i).getAngle() * MathUtils.radiansToDegrees);
+			       shader.render((Renderable)tmp);
+				}else if(tmp instanceof ModelInstance){
+					((ModelInstance)tmp).transform.setToTranslation(pos).rotate(
+							new Vector3(0, 0, 1),
+							bodies.get(i).getAngle() * MathUtils.radiansToDegrees);
+					modelBatch.render((ModelInstance)tmp, environment);
+				}
 			}
 		}
 
+	       shader.end();
+	       renderContext.end();
 		modelBatch.end();
-		//render.render(world, cam.combined);
-		
-		//instance.transform.rotate(new Vector3(0,0,1), 1f);
+		// render.render(world, cam.combined);
 
-	//	instance.transform.setToTranslation(new Vector3(10,0,0));
-		
-		
+		// instance.transform.rotate(new Vector3(0,0,1), 1f);
 
-		
-		
+		// instance.transform.setToTranslation(new Vector3(10,0,0));
+
 	}
-	
+
 	@Override
-	public void dispose(){
+	public void dispose() {
 		modelBatch.dispose();
 		model.dispose();
 		sphere.dispose();
+		shader.dispose();
 	}
 }
