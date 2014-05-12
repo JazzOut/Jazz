@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 public enum BlockTypes {
 
-	SMALL_CIRCLE(new ModelBuilder().createSphere(2, 2, 2, 19, 19, new Material(), Usage.Normal | Usage.Position, 0, 360, 0, 360), "sphere", BodyType.DynamicBody, 10f, .5f, 0f),
+	SMALL_CIRCLE(new ModelBuilder().createSphere(2, 2, 2, 19, 19, new Material(), Usage.Normal | Usage.Position, 0, 360, 0, 360), "sphere", BodyType.DynamicBody, 10f, 0f, 1f),
 	REG_BLOCK(new ModelBuilder().createBox(10, 5, 5, new Material(), Usage.Normal | Usage.Position), "rectangle", BodyType.StaticBody, 10f, .5f, 0f),
 	WALL(new ModelBuilder().createBox(5, 200, 5, new Material(), Usage.Normal | Usage.Position), "rectangle",BodyType.StaticBody, 0,0,0),
 	LONG_WALL(new ModelBuilder().createBox(5, 300, 5, new Material(), Usage.Normal | Usage.Position), "rectangle",BodyType.StaticBody, 0,0,0);

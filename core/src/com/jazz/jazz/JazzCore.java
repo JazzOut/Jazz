@@ -24,6 +24,7 @@ public class JazzCore extends ApplicationAdapter {
 	
 	public static Vector3 threeD = new Vector3(0,0,0);
 	public static final Vector3 axis = new Vector3(0,0,1);
+	public static final Vector2 tmp = new Vector2(0,0);
 	private final Array<Block> activeBlocks = new Array<Block>();
 	   private final Pool<Block> blockPool = new Pool<Block>() {
 		    @Override
@@ -114,7 +115,7 @@ public class JazzCore extends ApplicationAdapter {
 		}
 		
 		ball = new StandardBall();
-		ball.init(world, new Vector2(0,0));
+		ball.init(world, new Vector2(0,0), new Vector2(2,10));
 		ball.updateModel();
 		
 		bound = new Boundaries("std_rect");
@@ -130,6 +131,8 @@ public class JazzCore extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+		ball.update();
+		
 		world.step(1/60f, 5, 2);
 		modelBatch.begin(cam);
 		activeBlocks.get(0).getModInst().transform.getTranslation(threeD);
