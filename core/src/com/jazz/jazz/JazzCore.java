@@ -5,7 +5,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -16,21 +15,19 @@ import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.Pools;
 
 public class JazzCore extends ApplicationAdapter {
 	
 	public static Vector3 threeD = new Vector3(0,0,0);
 	public static final Vector3 axis = new Vector3(0,0,1);
 	private final Array<Block> activeBlocks = new Array<Block>();
-	   private final Pool<StandardBlock> blockPool = new Pool<StandardBlock>() {
+	   private final Pool<Block> blockPool = new Pool<Block>() {
 		    @Override
-			    protected StandardBlock newObject() {
+			    protected Block newObject() {
 			        return new StandardBlock();
 			    }
 		    };
@@ -49,13 +46,14 @@ public class JazzCore extends ApplicationAdapter {
 	public Box2DDebugRenderer render;
 	public World world;
 	public DirectionalLight light;
-	ParticleEffect particle;
+	public Boundaries bound;
+	private StandardBall ball;
 	
 	@Override
 	public void create () {
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, .4f, .4f, .4f, 1f));
-		light = new DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.2f);
+		light = new DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.5f);
 		environment.add(light);
 		//environment.add(new DirectionalLight().set(.8f,.8f,.8f,-1f,-.8f,-.2f));
 		
@@ -108,15 +106,19 @@ public class JazzCore extends ApplicationAdapter {
 		Vector2 pos = new Vector2();
 		for(int j = 0; j < columCount; j++){
 			for(int i = 0; i < rowCount; i++){
-				block = blockPool.obtain();
-				world = block.init(world, pos.set(i*15, j * 10));
+				block = (StandardBlock)blockPool.obtain();
+				world = ((StandardBlock)block).init(world, pos.set(i*15+10, j * 10+10));
 				block.updateModel();
 				activeBlocks.add(block);
 			}
 		}
 		
+		ball = new StandardBall();
+		ball.init(world, new Vector2(0,0));
+		ball.updateModel();
 		
-
+		bound = new Boundaries("std_rect");
+		world = bound.init(world);
 		
 		render = new Box2DDebugRenderer();
 	}
@@ -130,12 +132,16 @@ public class JazzCore extends ApplicationAdapter {
 
 		world.step(1/60f, 5, 2);
 		modelBatch.begin(cam);
-
+		activeBlocks.get(0).getModInst().transform.getTranslation(threeD);
+		System.out.println(threeD.x + " "+ threeD.y);
 		for(int i = 0; i<activeBlocks.size; i++){
-			System.out.println(i);
+			
 			activeBlocks.get(i).updateModel();
 			modelBatch.render(activeBlocks.get(i).getModInst(), environment);
+			bound.render(modelBatch, environment);
 		}
+		ball.updateModel();
+		modelBatch.render(ball.getModInst(), environment);
 		modelBatch.end();
 		render.render(world, cam.combined);
 
