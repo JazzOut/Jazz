@@ -15,26 +15,27 @@ public class GameCollision implements ContactListener {
 	@Override
 	public void beginContact(Contact contact) {
 		// TODO Auto-generated method stub
-//		Body a = contact.getFixtureA().getBody();
-//		Body b = contact.getFixtureB().getBody();
-//		
-//		if(a.getUserData() instanceof Ball){
-//			Ball ball = (Ball) a.getUserData();
-//			b.getPosition();
-//			ball.setSpeed(JazzCore.tmp.set(-ball.speed.x, ball.speed.y));
-//		}
-//		else if(b.getUserData() instanceof Ball){
-//			Ball ball = (Ball) b.getUserData();
-//			otherPos = a.getPosition();
-//			thisPos = b.getPosition();
-//			float x = ball.speed.x;
-//			float y = ball.speed.y;
-//			
-//			if(thisPos.x  < otherPos.x){
-//				x = -x;
-//			}else if(thisPos.x  < otherPos.x)
-//			ball.setSpeed(JazzCore.tmp.set(-ball.speed.x, ball.speed.y));
-//		}
+		Body a = contact.getFixtureA().getBody();
+		Body b = contact.getFixtureB().getBody();
+		
+	
+		
+		if(a.getUserData() instanceof Ball){
+			if(b.getUserData() instanceof Block){
+				((Block)b.getUserData()).hits--;
+				if(((Block)b.getUserData()).hits <= 0){
+					((Block)b.getUserData()).isAlive = false;
+				}
+			}
+		}
+		else if(b.getUserData() instanceof Ball){
+			if(a.getUserData() instanceof Block){
+				((Block)a.getUserData()).hits--;
+				if(((Block)a.getUserData()).hits <= 0){
+					((Block)a.getUserData()).isAlive = false;
+				}
+			}
+		}
 	}
 
 	@Override
