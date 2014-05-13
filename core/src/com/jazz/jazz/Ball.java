@@ -20,10 +20,15 @@ public abstract class Ball implements Poolable{
 	Body body;
 	Vector2 speed;
 	
+	protected boolean isLockedToPaddle;
+	protected boolean isAlive;
+	
 	public Ball(){
 		modInst = null;
 		body = null;
 		speed = null;
+		isLockedToPaddle = false;
+		isAlive = false;
 	}
 	
 	public World init(World world, ModelInstance modInst, BodyType bodyType, FixtureDef fix, Vector2 pos, Vector2 speed){
@@ -35,8 +40,12 @@ public abstract class Ball implements Poolable{
 		body = world.createBody(ballBodyDef);
 		body.createFixture(fix);
 		body.setUserData(this);
+		isLockedToPaddle = true;
+		isAlive = true;
 		return world;
 	}
+	
+	public abstract void update();
 	
 	public void updateModel(){
 		modInst.transform.setToTranslation(JazzCore.get3D(body.getPosition())).rotate(JazzCore.axis, body.getAngle()*MathUtils.radiansToDegrees);
@@ -53,6 +62,8 @@ public abstract class Ball implements Poolable{
 		modInst = null;
 		body = null;
 		speed = null;
+		isLockedToPaddle = false;
+		isAlive = false;
 	}
 	
 	public void dispose(){

@@ -9,8 +9,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class GameCollision implements ContactListener {
 
-	private static Vector2 otherPos;
-	private static Vector2 thisPos;
+
 	
 	@Override
 	public void beginContact(Contact contact) {
@@ -27,6 +26,13 @@ public class GameCollision implements ContactListener {
 					((Block)b.getUserData()).isAlive = false;
 				}
 			}
+			
+			if(b.getUserData() instanceof Wall){
+				Wall wall = (Wall) b.getUserData();
+				if(wall.deathWall){
+					((Ball)a.getUserData()).isAlive = false;
+				}
+			}
 		}
 		else if(b.getUserData() instanceof Ball){
 			if(a.getUserData() instanceof Block){
@@ -35,7 +41,16 @@ public class GameCollision implements ContactListener {
 					((Block)a.getUserData()).isAlive = false;
 				}
 			}
+			
+			if(a.getUserData() instanceof Wall){
+				Wall wall = (Wall) a.getUserData();
+				if(wall.deathWall){
+					((Ball)b.getUserData()).isAlive = false;
+				}
+			}
 		}
+		
+
 	}
 
 	@Override

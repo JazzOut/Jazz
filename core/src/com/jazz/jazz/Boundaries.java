@@ -16,7 +16,7 @@ public class Boundaries {
 	
 	String shape;
 	Array<Wall> walls = new Array<Wall>();
-	
+	protected float topLeftY;
 	
 	
 	public Boundaries(String shape){
@@ -30,19 +30,21 @@ public class Boundaries {
 		if(shape.equals("std_rect")){
 			Wall wall = new Wall();
 			Vector2 pos = new Vector2(0,0);
-			world = wall.init(world, new ModelInstance(BlockTypes.WALL.getCopy()), BlockTypes.WALL.getBodyType(), BlockTypes.WALL.getFixtureDef(), pos.set(0-sizeOffset, 100-downShift));
+			world = wall.init(world, new ModelInstance(BlockTypes.DEATH_WALL.getCopy()), BlockTypes.WALL.getBodyType(), BlockTypes.WALL.getFixtureDef(), pos.set(0-sizeOffset, 100-downShift), true);
 			walls.add(wall);
 			wall = new Wall();
-			world = wall.init(world, new ModelInstance(BlockTypes.WALL.getCopy()), BlockTypes.WALL.getBodyType(), BlockTypes.WALL.getFixtureDef(), pos.set(300-sizeOffset, 100-downShift));
+			world = wall.init(world, new ModelInstance(BlockTypes.WALL.getCopy()), BlockTypes.WALL.getBodyType(), BlockTypes.WALL.getFixtureDef(), pos.set(300-sizeOffset, 100-downShift), false);
 			walls.add(wall);
 			wall = new Wall();
-			world = wall.init(world, new ModelInstance(BlockTypes.LONG_WALL.getCopy()), BlockTypes.LONG_WALL.getBodyType(), BlockTypes.LONG_WALL.getFixtureDef(), pos.set(150-sizeOffset, 0+sizeOffset-downShift));
+			world = wall.init(world, new ModelInstance(BlockTypes.LONG_WALL.getCopy()), BlockTypes.LONG_WALL.getBodyType(), BlockTypes.LONG_WALL.getFixtureDef(), pos.set(150-sizeOffset, 0+sizeOffset-downShift), false);
 			wall.rotate(-90f);
 			walls.add(wall);
 			wall = new Wall();
-			world = wall.init(world, new ModelInstance(BlockTypes.LONG_WALL.getCopy()), BlockTypes.LONG_WALL.getBodyType(), BlockTypes.LONG_WALL.getFixtureDef(), pos.set(150-sizeOffset, 200-sizeOffset-downShift));
+			world = wall.init(world, new ModelInstance(BlockTypes.LONG_WALL.getCopy()), BlockTypes.LONG_WALL.getBodyType(), BlockTypes.LONG_WALL.getFixtureDef(), pos.set(150-sizeOffset, 200-sizeOffset-downShift), false);
 			wall.rotate(90f);
 			walls.add(wall);
+			
+			topLeftY  = 100-downShift-sizeOffset;
 		}
 		
 		return world;

@@ -15,13 +15,15 @@ public class Wall {
 	
 	private ModelInstance modInst;
 	private Body body;
+	protected boolean deathWall;
 	
 	public Wall(){
 		modInst = null;
 		body = null;
+		deathWall = false;
 	}
 	
-	public World init(World world, ModelInstance modInst, BodyType bodyType, FixtureDef fix, Vector2 pos){
+	public World init(World world, ModelInstance modInst, BodyType bodyType, FixtureDef fix, Vector2 pos, boolean deathWall){
 		
 		wallBodyDef.type = bodyType;
 		wallBodyDef.position.set(pos);
@@ -30,6 +32,7 @@ public class Wall {
 		body.createFixture(fix);
 		body.setUserData(this);
 		updateModel();
+		this.deathWall = deathWall;
 		return world;
 	}
 	

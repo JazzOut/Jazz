@@ -1,8 +1,6 @@
 package com.jazz.jazz;
 
 //github.com/JazzOut/Jazz.git
-import java.util.Random;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,7 +14,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -42,11 +40,14 @@ public class JazzCore extends ApplicationAdapter {
 	public World world;
 	public DirectionalLight light;
 	public Boundaries bound;
-	private StandardBall ball;
 	Array<Level> levels;
 	private int currLevel;
 	Array<StarLayer> stars;
+	Paddle paddle;
+	
+	private float lastY;
 
+	
 	@Override
 	public void create() {
 		environment = new Environment();
@@ -64,6 +65,7 @@ public class JazzCore extends ApplicationAdapter {
 		// cam = new OrthographicCamera(Gdx.graphics.getWidth(),
 		// Gdx.graphics.getHeight());
 		cam.position.set(150f, 100f, 400f);
+		
 		// cam.lookAt(0,0,0);
 		cam.near = 1f;
 		cam.far = 5000f;
@@ -71,72 +73,18 @@ public class JazzCore extends ApplicationAdapter {
 
 		camController = new CameraInputController(cam);
 		camController.scrollFactor = -5;
-		Gdx.input.setInputProcessor(camController);
+		Gdx.input.setCursorCatched(true);
+		Gdx.input.setCursorPosition(0,0);
+		//Gdx.input.setInputProcessor(camController);
 		levels = new Array<Level>();
 		Levels[] levs = Levels.values();
 		for(Levels l : levs){
 			levels.add(l.getLevel());
 		}
 		currLevel = 0;
-		
-		// Body body;
-		// ModelBuilder modelBuilder = new ModelBuilder();
-
-		// need a body for 2d
-		// modelbuilder for the models till we get blender
-		// create the model using the modelbuilder
-		// set the model into an instance
-		//
-		// so modelbuilder -<builds>> model -<goesin>> instance -<goes in body>>
-		// userdata
-		//
-		// need bodydefinition for body
-		// set body position, type
-		// need fixture for body
-		// set fixture with density, restitution, and friction
-		// create shape for the fixture
-		// set the shape
-		// create body using world.createbody
-		// set 3d modelinstance to body using setuserdata
-
-		// model example
-		// model = modelBuilder.createBox(5f, 5f, 5f,
-		// new Material(ColorAttribute.createDiffuse(Color.GREEN)),
-		// Usage.Position | Usage.Normal);
-		// instance = new ModelInstance(model);
 
 		world = new World(new Vector2(0, 0), true);
 		world.setContactListener(new GameCollision());
-
-//		int rowCount = 10;
-//		int columCount = 12;
-//		
-//		Block block;
-//		Random rnd = new Random();
-//		Vector2 pos = new Vector2();
-//		for (int j = 0; j < columCount; j++) {
-//			for (int i = 0; i < rowCount; i++) {
-//				if(rnd.nextFloat() < .5){
-//					block = Levels.standardBlockPool.obtain();
-//					world = ((StandardBlock) block).init(world,
-//							pos.set(i * 10 + 100, j * 15 + 10));
-//				}else{
-//					block = Levels.hardBlockPool.obtain();
-//					world = ((HardBlock) block).init(world,
-//							pos.set(i * 10 + 100, j * 15 + 10));
-//				}
-//				block.rotate(90);
-//				block.updateModel();
-//				activeBlocks.add(block);
-//			}
-//		}
-//
-//		ball = new StandardBall();
-//		ball.init(world, new Vector2(0, 0), new Vector2(2, 10));
-//		ball.updateModel();
-//
-//		bound = new Boundaries("std_rect");
-//		world = bound.init(world);
 
 		for(Level l : levels){
 			l.create(world);
@@ -144,11 +92,15 @@ public class JazzCore extends ApplicationAdapter {
 		
 		stars = new Array<StarLayer>();
 		StarLayer starL;
-		for(int i = 0; i<5; i++){
+		for(int i = 0; i<10; i++){
 			starL = new StarLayer();
 			starL.init(600, -500-100*i, 100);
 			stars.add(starL);
 		}
+		
+		paddle = new Paddle();
+		paddle.init(world, new Vector2(10,100));
+		lastY = Gdx.input.getY();
 		
 		render = new Box2DDebugRenderer();
 	}
@@ -160,14 +112,32 @@ public class JazzCore extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+		threeD.set(0,Gdx.input.getY() , 0);
+		cam.project(threeD);
+		
+		//Ray ray = cam.getPickRay(Gdx.input.getX(), Gdx.input.getY());
+		//final float distance = -ray.origin.x / ray.direction.x;
+		//threeD.set(ray.direction).scl(distance).add(ray.origin);
+		
+		paddle.mouseY((lastY - Gdx.input.getY()));
+		lastY = Gdx.input.getY();
+		//paddle.getModInst().transform.setTranslation(threeD);
+	//	System.out.println(Gdx.app.getGraphics().getHeight());
+		//System.out.println(Gdx.input.getY());
+		//System.out.println(threeD.x + " " + threeD.y + " " + threeD.z );
+		//System.out.println(Gdx.input.getX() + " " + Gdx.input.getY());
+		
+		
 
 		world.step(1 / 60f, 5, 2);
 		modelBatch.begin(cam);
-			levels.get(currLevel).render(modelBatch, world, environment);
+			levels.get(currLevel).render(modelBatch, world, environment, paddle);
 			for(StarLayer s : stars){
 				s.render(modelBatch, environment);
 			
 			}
+			paddle.updateModel();
+			modelBatch.render(paddle.getModInst(), environment);
 		modelBatch.end();
 		//render.render(world, cam.combined);
 		

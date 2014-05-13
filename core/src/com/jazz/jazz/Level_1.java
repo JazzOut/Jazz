@@ -2,10 +2,9 @@ package com.jazz.jazz;
 
 import java.util.Random;
 
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 public class Level_1 extends Level {
 
@@ -42,9 +41,11 @@ public class Level_1 extends Level {
 			}
 		}
 	
-		ball = new StandardBall();
-		((StandardBall)ball).init(world, new Vector2(10, 50), new Vector2(2, 1));
+		balls = new Array<Ball>();
+		StandardBall ball = Levels.standardBallPool.obtain();
+		ball.init(world, new Vector2(10, 50), new Vector2(2, 1));
 		ball.updateModel();
+		balls.add(ball);
 		
 		bound = new Boundaries("std_rect");
 		world = bound.init(world);

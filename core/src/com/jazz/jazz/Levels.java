@@ -26,6 +26,13 @@ public enum Levels {
 		}
 	};
 	
+	public static final Pool<StandardBall> standardBallPool = new Pool<StandardBall>() {
+		@Override
+		protected StandardBall newObject() {
+			return new StandardBall();
+		}
+	};
+	
 	
 	public Level getLevel(){
 		return level;
