@@ -22,6 +22,10 @@ public abstract class Level {
 	public World render(ModelBatch modelBatch, World world, Environment environment){
 		((StandardBall)ball).update();
 		ball.updateModel();
+		bound.render(modelBatch, environment);
+		if(activeBlocks.size == 0){
+			return world;
+		}
 		activeBlocks.get(0).getModInst().transform.getTranslation(JazzCore.threeD);
 		Block block;
 		for (int i = 0; i < activeBlocks.size; i++) {
@@ -38,10 +42,9 @@ public abstract class Level {
 			} else {
 				block.updateModel();
 				modelBatch.render(block.getModInst(), environment);
-				bound.render(modelBatch, environment);
 			}
 		}
-		ball.updateModel();
+
 		modelBatch.render(ball.getModInst(), environment);
 		
 		return world;

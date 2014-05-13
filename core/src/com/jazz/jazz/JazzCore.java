@@ -45,6 +45,7 @@ public class JazzCore extends ApplicationAdapter {
 	private StandardBall ball;
 	Array<Level> levels;
 	private int currLevel;
+	Array<StarLayer> stars;
 
 	@Override
 	public void create() {
@@ -62,14 +63,14 @@ public class JazzCore extends ApplicationAdapter {
 				Gdx.graphics.getHeight());
 		// cam = new OrthographicCamera(Gdx.graphics.getWidth(),
 		// Gdx.graphics.getHeight());
-		cam.position.set(0f, 100f, 400f);
+		cam.position.set(150f, 100f, 400f);
 		// cam.lookAt(0,0,0);
 		cam.near = 1f;
 		cam.far = 5000f;
 		cam.update();
 
 		camController = new CameraInputController(cam);
-		camController.scrollFactor = -10;
+		camController.scrollFactor = -5;
 		Gdx.input.setInputProcessor(camController);
 		levels = new Array<Level>();
 		Levels[] levs = Levels.values();
@@ -141,6 +142,14 @@ public class JazzCore extends ApplicationAdapter {
 			l.create(world);
 		}
 		
+		stars = new Array<StarLayer>();
+		StarLayer starL;
+		for(int i = 0; i<5; i++){
+			starL = new StarLayer();
+			starL.init(600, -500-100*i, 100);
+			stars.add(starL);
+		}
+		
 		render = new Box2DDebugRenderer();
 	}
 
@@ -155,6 +164,10 @@ public class JazzCore extends ApplicationAdapter {
 		world.step(1 / 60f, 5, 2);
 		modelBatch.begin(cam);
 			levels.get(currLevel).render(modelBatch, world, environment);
+			for(StarLayer s : stars){
+				s.render(modelBatch, environment);
+			
+			}
 		modelBatch.end();
 		//render.render(world, cam.combined);
 		
@@ -168,5 +181,6 @@ public class JazzCore extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		modelBatch.dispose();
+		Star.model.dispose();
 	}
 }

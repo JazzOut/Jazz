@@ -1,5 +1,6 @@
 package com.jazz.jazz;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -14,12 +15,16 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 public enum BlockTypes {
+	
 
-	SMALL_CIRCLE(new ModelBuilder().createSphere(2, 2, 2, 19, 19, new Material(), Usage.Normal | Usage.Position, 0, 360, 0, 360), "sphere", BodyType.DynamicBody, 10f, 0f, 1f),
+	//SMALL_CIRCLE(new ModelBuilder().createSphere(2, 2, 2, 19, 19, new Material(), Usage.Normal | Usage.Position, 0, 360, 0, 360), "sphere", BodyType.DynamicBody, 10f, 0f, 1f),
+	SMALL_CIRCLE(getModel("data/Ball.g3db"), "sphere", BodyType.DynamicBody, 10f, 0f, 1f),
 	REG_BLOCK(new ModelBuilder().createBox(10, 5, 5, new Material(), Usage.Normal | Usage.Position), "rectangle", BodyType.StaticBody, 10f, .5f, 0f),
 	HARD_BLOCK(new ModelBuilder().createBox(10, 5, 5, new Material(ColorAttribute.createDiffuse(Color.GREEN)),Usage.Position | Usage.Normal), "rectangle", BodyType.StaticBody, 10f, .5f, 0f),
 	WALL(new ModelBuilder().createBox(5, 200, 5, new Material(), Usage.Normal | Usage.Position), "rectangle",BodyType.StaticBody, 0,0,0),
 	LONG_WALL(new ModelBuilder().createBox(5, 300, 5, new Material(), Usage.Normal | Usage.Position), "rectangle",BodyType.StaticBody, 0,0,0);
+
+
 	
 	private Model model;
 	private BodyType bodType;
@@ -53,6 +58,15 @@ public enum BlockTypes {
 			fix.shape = new CircleShape();
 			fix.shape.setRadius(dim.y/2);
 		}
+	}
+	
+	private static Model getModel(String path){
+		AssetManager assets = new AssetManager();
+		assets.load(path, Model.class);
+
+		assets.finishLoading();
+		Model model = assets.get(path);
+		return model;
 	}
 	
 	public BodyType getBodyType(){
