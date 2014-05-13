@@ -10,7 +10,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class Ball implements Poolable{
+public abstract class Ball implements Poolable{
+	
+	
 	
 	static BodyDef ballBodyDef = new BodyDef();
 

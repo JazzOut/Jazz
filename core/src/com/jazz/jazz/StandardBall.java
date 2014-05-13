@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class StandardBall extends Ball {
 
-	public final static float MAX_SPEED = 45;
+	private final float MAX_SPEED = 100;
 	
 	public StandardBall() {
 		super();
@@ -23,11 +23,15 @@ public class StandardBall extends Ball {
 	}
 	
 	public void update(){
-		//super.body.setLinearVelocity(speed);
+
 		Vector2 temp= super.body.getLinearVelocity();
-		if(temp.len() < MAX_SPEED){
-			temp = temp.nor().scl(MAX_SPEED);
+		if(temp.len() != getMaxSpeed()){
+			temp = temp.nor().scl(getMaxSpeed());
 		}
 		super.body.setLinearVelocity(temp.x, temp.y);
+	}
+	
+	public float getMaxSpeed(){
+		return MAX_SPEED;
 	}
 }

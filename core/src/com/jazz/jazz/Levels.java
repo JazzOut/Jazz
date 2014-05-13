@@ -4,8 +4,14 @@ import com.badlogic.gdx.utils.Pool;
 
 public enum Levels {
 	
-	LEVEL_1();
+	LEVEL_1(new Level_1());
 
+	private Level level;
+	
+	private Levels(Level level){
+		this.level = level;
+	}
+	
 	public static final Pool<StandardBlock> standardBlockPool = new Pool<StandardBlock>() {
 		@Override
 		protected StandardBlock newObject() {
@@ -20,6 +26,10 @@ public enum Levels {
 		}
 	};
 	
+	
+	public Level getLevel(){
+		return level;
+	}
 	
 
 }

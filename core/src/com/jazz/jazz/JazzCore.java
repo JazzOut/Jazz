@@ -43,6 +43,8 @@ public class JazzCore extends ApplicationAdapter {
 	public DirectionalLight light;
 	public Boundaries bound;
 	private StandardBall ball;
+	Array<Level> levels;
+	private int currLevel;
 
 	@Override
 	public void create() {
@@ -69,6 +71,13 @@ public class JazzCore extends ApplicationAdapter {
 		camController = new CameraInputController(cam);
 		camController.scrollFactor = -10;
 		Gdx.input.setInputProcessor(camController);
+		levels = new Array<Level>();
+		Levels[] levs = Levels.values();
+		for(Levels l : levs){
+			levels.add(l.getLevel());
+		}
+		currLevel = 0;
+		
 		// Body body;
 		// ModelBuilder modelBuilder = new ModelBuilder();
 
@@ -98,35 +107,40 @@ public class JazzCore extends ApplicationAdapter {
 		world = new World(new Vector2(0, 0), true);
 		world.setContactListener(new GameCollision());
 
-		int rowCount = 19;
-		int columCount = 15;
-		Body body;
-		Block block;
-		Random rnd = new Random();
-		Vector2 pos = new Vector2();
-		for (int j = 0; j < columCount; j++) {
-			for (int i = 0; i < rowCount; i++) {
-				if(rnd.nextFloat() < .5){
-					block = Levels.standardBlockPool.obtain();
-					world = ((StandardBlock) block).init(world,
-							pos.set(i * 15 + 10, j * 10 + 10));
-				}else{
-					block = Levels.hardBlockPool.obtain();
-					world = ((HardBlock) block).init(world,
-							pos.set(i * 15 + 10, j * 10 + 10));
-				}
-				block.updateModel();
-				activeBlocks.add(block);
-			}
+//		int rowCount = 10;
+//		int columCount = 12;
+//		
+//		Block block;
+//		Random rnd = new Random();
+//		Vector2 pos = new Vector2();
+//		for (int j = 0; j < columCount; j++) {
+//			for (int i = 0; i < rowCount; i++) {
+//				if(rnd.nextFloat() < .5){
+//					block = Levels.standardBlockPool.obtain();
+//					world = ((StandardBlock) block).init(world,
+//							pos.set(i * 10 + 100, j * 15 + 10));
+//				}else{
+//					block = Levels.hardBlockPool.obtain();
+//					world = ((HardBlock) block).init(world,
+//							pos.set(i * 10 + 100, j * 15 + 10));
+//				}
+//				block.rotate(90);
+//				block.updateModel();
+//				activeBlocks.add(block);
+//			}
+//		}
+//
+//		ball = new StandardBall();
+//		ball.init(world, new Vector2(0, 0), new Vector2(2, 10));
+//		ball.updateModel();
+//
+//		bound = new Boundaries("std_rect");
+//		world = bound.init(world);
+
+		for(Level l : levels){
+			l.create(world);
 		}
-
-		ball = new StandardBall();
-		ball.init(world, new Vector2(0, 0), new Vector2(2, 10));
-		ball.updateModel();
-
-		bound = new Boundaries("std_rect");
-		world = bound.init(world);
-
+		
 		render = new Box2DDebugRenderer();
 	}
 
@@ -137,32 +151,10 @@ public class JazzCore extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-		ball.update();
 
 		world.step(1 / 60f, 5, 2);
 		modelBatch.begin(cam);
-		activeBlocks.get(0).getModInst().transform.getTranslation(threeD);
-		System.out.println(threeD.x + " " + threeD.y);
-		Block block;
-		for (int i = 0; i < activeBlocks.size; i++) {
-			block = activeBlocks.get(i);
-			if (!block.isAlive) {
-				activeBlocks.removeIndex(i);
-				world.destroyBody(block.getBody());
-				if(block instanceof HardBlock){
-					Levels.hardBlockPool.free((HardBlock) block);
-				}else if(block instanceof StandardBlock){
-					Levels.standardBlockPool.free((StandardBlock) block);
-				}
-				i--;
-			} else {
-				block.updateModel();
-				modelBatch.render(block.getModInst(), environment);
-				bound.render(modelBatch, environment);
-			}
-		}
-		ball.updateModel();
-		modelBatch.render(ball.getModInst(), environment);
+			levels.get(currLevel).render(modelBatch, world, environment);
 		modelBatch.end();
 		//render.render(world, cam.combined);
 		
