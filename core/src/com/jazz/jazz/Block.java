@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class Block implements Poolable{
+public abstract class Block implements Poolable{
 
 	//need a body for 2d
 	//modelbuilder for the models till we get blender
@@ -29,18 +29,26 @@ public class Block implements Poolable{
 	//set 3d modelinstance to body using setuserdata
 	
 	static BodyDef bodyDef = new BodyDef();
+	private final int MAXHITS = 1;
 	
 	private ModelInstance modInst;
 
 	private Body body;
 	
+	protected boolean isAlive;
+	protected int hits;
+	
 	public Block(){
 		modInst = null;
 		body = null; 
+		isAlive = false;
+		hits = 0;
 	}
 
-	public World init(World world, ModelInstance modInst, BodyType bodyType, FixtureDef fix, Vector2 pos){
+	public World init(World world, ModelInstance modInst, BodyType bodyType, FixtureDef fix, Vector2 pos, int maxHits){
 		
+		isAlive = true;
+		hits = maxHits;
 		bodyDef.type = bodyType;
 		bodyDef.position.set(pos);
 		this.modInst = modInst;
@@ -54,11 +62,27 @@ public class Block implements Poolable{
 		modInst.transform.setToTranslation(JazzCore.get3D(body.getPosition())).rotate(JazzCore.axis, body.getAngle()*MathUtils.radiansToDegrees);
 	}
 	
+	public void rotate(float angle){
+		body.setTransform(body.getPosition(), angle* MathUtils.degreesToRadians);
+		updateModel();
+	}
+	
+	public void setPosition(Vector2 pos){
+		setPosition(pos.x, pos.y);
+	}
+	
+	public void setPosition(float x, float y){
+		body.setTransform(x, y, body.getAngle());
+		updateModel();
+	}
+	
 	@Override
 	public void reset() {
 		// TODO Auto-generated method stub
 		this.body = null;
 		modInst = null;
+		isAlive = false;
+		hits = 0;
 	}
 
 	public void dispose(){
@@ -72,4 +96,14 @@ public class Block implements Poolable{
 	public void setModInst(ModelInstance modInst) {
 		this.modInst = modInst;
 	}
+
+	public Body getBody() {
+		return body;
+	}
+
+	public void setBody(Body body) {
+		this.body = body;
+	}
+	
+	
 }

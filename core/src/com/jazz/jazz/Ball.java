@@ -10,23 +10,28 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class Ball implements Poolable{
+public abstract class Ball implements Poolable{
+	
+	
 	
 	static BodyDef ballBodyDef = new BodyDef();
 
 	private ModelInstance modInst;
-	private Body body;
+	Body body;
+	Vector2 speed;
 	
 	public Ball(){
 		modInst = null;
 		body = null;
+		speed = null;
 	}
 	
-	public World init(World world, ModelInstance modInst, BodyType bodyType, FixtureDef fix, Vector2 pos){
+	public World init(World world, ModelInstance modInst, BodyType bodyType, FixtureDef fix, Vector2 pos, Vector2 speed){
 		
 		ballBodyDef.type = bodyType;
 		ballBodyDef.position.set(pos);
 		this.modInst = modInst;
+		this.speed = speed;
 		body = world.createBody(ballBodyDef);
 		body.createFixture(fix);
 		body.setUserData(this);
@@ -37,12 +42,17 @@ public class Ball implements Poolable{
 		modInst.transform.setToTranslation(JazzCore.get3D(body.getPosition())).rotate(JazzCore.axis, body.getAngle()*MathUtils.radiansToDegrees);
 	}
 	
+	public void setSpeed(Vector2 speed){
+		this.speed = speed;
+	}
+	
 	
 	@Override
 	public void reset() {
 		// TODO Auto-generated method stub
 		modInst = null;
 		body = null;
+		speed = null;
 	}
 	
 	public void dispose(){
