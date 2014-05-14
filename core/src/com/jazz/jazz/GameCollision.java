@@ -50,6 +50,20 @@ public class GameCollision implements ContactListener {
 			}
 		}
 		
+		if(a.getUserData() instanceof Paddle){
+			if(b.getUserData() instanceof Crystal){
+				Crystal c = (Crystal) b.getUserData();
+				c.isAlive = false;
+				c.collected = true;
+			}
+		}else if(b.getUserData() instanceof Paddle){
+			if(a.getUserData() instanceof Crystal){
+				Crystal c = (Crystal) a.getUserData();
+				c.isAlive = false;
+				c.collected = true;
+			}
+		}
+		
 
 	}
 

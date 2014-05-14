@@ -24,9 +24,11 @@ public class Paddle {
 	private Body body;
 	private float lastMove;
 	private int force;
+	protected float score;
 	
 	public Paddle(){
 		modInst = null;
+		score = 0;
 	}
 	
 	public World init(World world, Vector2 pos, float lower, float upper){
@@ -36,7 +38,9 @@ public class Paddle {
 		force = 0;
 		
 		this.modInst = new ModelInstance(getModel());
+		
 		body = world.createBody(bodyDef);
+		
 		PrismaticJointDef prisDef = new PrismaticJointDef();
 		prisDef.bodyA = body;
 		bodyDef.type = BodyType.StaticBody;
@@ -51,7 +55,6 @@ public class Paddle {
 		
 
 		body.createFixture(createFixtureDef(10, 0, 0));
-//		bodB.createFixture(createFixtureDef(10, 0, 0));
 		body.setUserData(this);
 		world.createJoint(prisDef);
 		//body.setLinearDamping(100000);

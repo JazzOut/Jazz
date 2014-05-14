@@ -74,14 +74,14 @@ public class JazzCore extends ApplicationAdapter {
 		camController = new CameraInputController(cam);
 		camController.scrollFactor = -5;
 		Gdx.input.setCursorCatched(true);
-		Gdx.input.setCursorPosition(0,0);
+		//Gdx.input.setCursorPosition(0,0);
 		//Gdx.input.setInputProcessor(camController);
 		levels = new Array<Level>();
 		Levels[] levs = Levels.values();
 		for(Levels l : levs){
 			levels.add(l.getLevel());
 		}
-		currLevel = 1;
+		currLevel = 2;
 
 		world = new World(new Vector2(0, 0), true);
 		world.setContactListener(new GameCollision());
@@ -97,7 +97,7 @@ public class JazzCore extends ApplicationAdapter {
 		}
 		
 		paddle = new Paddle();
-		paddle.init(world, new Vector2(10,100), -100,100 );
+		paddle.init(world, new Vector2(0,100), -100,100 );
 		lastY = Gdx.input.getY();
 		
 		render = new Box2DDebugRenderer();
@@ -116,7 +116,7 @@ public class JazzCore extends ApplicationAdapter {
 		if(lastY != Gdx.input.getY()){
 			paddle.getBody().setLinearDamping(0);
 			paddle.mouseY(Gdx.input.getY());
-			Gdx.input.setCursorPosition(0, 0);
+			Gdx.input.setCursorPosition(0,0);
 			lastY = Gdx.input.getY();
 		}
 		else{
@@ -146,7 +146,7 @@ public class JazzCore extends ApplicationAdapter {
 			paddle.updateModel();
 			modelBatch.render(paddle.getModInst(), environment);
 		modelBatch.end();
-		render.render(world, cam.combined);
+		//render.render(world, cam.combined);
 		
 	}
 
@@ -159,5 +159,6 @@ public class JazzCore extends ApplicationAdapter {
 	public void dispose() {
 		modelBatch.dispose();
 		Star.model.dispose();
+		Crystal.crystalModel.dispose();
 	}
 }

@@ -31,6 +31,7 @@ public class Level_3 extends Level {
 					block = Levels.standardBlockPool.obtain();
 					world = ((StandardBlock) block).init(world,
 					pos.set(i * 15 + 100, j * 15 + 10));
+					activeBlocks.add(block);
 				}
 //				else{
 //					block = Levels.hardBlockPool.obtain();

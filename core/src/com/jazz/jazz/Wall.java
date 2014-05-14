@@ -29,10 +29,21 @@ public class Wall {
 		wallBodyDef.position.set(pos);
 		this.modInst = modInst;
 		body = world.createBody(wallBodyDef);
-		body.createFixture(fix);
+		if(deathWall){
+			FixtureDef fix2 = new FixtureDef();
+			fix2.density = fix.density;
+			fix2.restitution = fix.restitution;
+			fix2.friction = fix.friction;
+			fix2.shape = fix.shape;
+			fix2.isSensor = true;
+			body.createFixture(fix2);
+		}else{
+			body.createFixture(fix);
+		}
 		body.setUserData(this);
 		updateModel();
 		this.deathWall = deathWall;
+
 		return world;
 	}
 	
