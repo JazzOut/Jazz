@@ -163,7 +163,7 @@ public abstract class Level {
 		Vector2 dir = paddle.getBody().getPosition().sub(body.getPosition());
 		float distanceToCenter = dir.len();
 		dir = dir.nor();
-		float forceMagnitude = 200 * distanceToCenter/200; 
+		float forceMagnitude = 50 *body.getMass()* distanceToCenter/400;
 		body.applyForceToCenter(dir.scl(forceMagnitude), true);
 		return dir.scl(forceMagnitude);
 	}

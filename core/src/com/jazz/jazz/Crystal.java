@@ -43,13 +43,15 @@ public class Crystal implements Poolable{
 		crystalDef.position.set(pos);
 		body = world.createBody(crystalDef);
 		
-		fix.density = 0;
+		fix.density = 10;
 		fix.friction = 0;
 		fix.restitution = 0;
 		
 		fix.shape = new CircleShape();
 		fix.shape.setRadius(2);
-		fix.isSensor = true;
+		fix.filter.categoryBits =2;
+		fix.filter.maskBits = 2;
+		//fix.isSensor = true;
 		body.createFixture(fix);
 		body.setUserData(this);
 		isAlive = true;
@@ -80,7 +82,7 @@ public class Crystal implements Poolable{
 	}
 	
 	public void updateModel(){
-		modInst.transform.setToTranslation(JazzCore.get3D(body.getPosition())).rotate(JazzCore.axis, body.getAngle()*MathUtils.radiansToDegrees);
+		modInst.transform.setToTranslation(JazzGame.get3D(body.getPosition())).rotate(JazzGame.axis, body.getAngle()*MathUtils.radiansToDegrees);
 	}
 	
 	public void setPosition(Vector2 pos){

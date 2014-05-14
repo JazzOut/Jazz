@@ -62,7 +62,7 @@ public abstract class Block implements Poolable{
 	}
 	
 	public void updateModel(){
-		modInst.transform.setToTranslation(JazzCore.get3D(body.getPosition())).rotate(JazzCore.axis, body.getAngle()*MathUtils.radiansToDegrees);
+		modInst.transform.setToTranslation(JazzGame.get3D(body.getPosition())).rotate(JazzGame.axis, body.getAngle()*MathUtils.radiansToDegrees);
 	}
 	
 	public void rotate(float angle){
