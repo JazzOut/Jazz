@@ -53,6 +53,7 @@ public class JazzGame implements Screen{
 
 	private boolean pushingS;
 	private boolean pushingD;
+	private boolean debug;
 	private BitmapFont font;
 	private SpriteBatch textBatch;
 	
@@ -67,6 +68,7 @@ public class JazzGame implements Screen{
 		time = 0;
 		pushingS = false;
 		pushingD = false;
+		debug = false;
 		font = new BitmapFont();
 		textBatch = new SpriteBatch();
 		
@@ -160,6 +162,10 @@ public class JazzGame implements Screen{
 			time = 0;
 		}else if(!Gdx.input.isKeyPressed(Input.Keys.D) && pushingD){
 			pushingD = false;
+		}else if(Gdx.input.isKeyPressed(Input.Keys.F)){
+			debug = true;
+		}else if(Gdx.input.isKeyPressed(Input.Keys.G)){
+			debug = false;
 		}
 		camController.update();
 		
@@ -222,7 +228,9 @@ public class JazzGame implements Screen{
 				
 			}
 		}
-		//render.render(world, cam.combined);
+		if(debug){
+			render.render(world, cam.combined);
+		}
 		
 	}
 

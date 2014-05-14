@@ -3,6 +3,13 @@ Jazz
 
 The game itself
 
+Controls:
+=========
+
+Move mouse to move up or down.
+Left click Pulls.
+Right click pushes.
+
 Proccess to pull:
 =================
 
