@@ -53,7 +53,9 @@ public class Boundaries {
 	public void render(ModelBatch batch, Environment env){
 		for(int i = 0; i < walls.size; i++){
 			walls.get(i).updateModel();
-			batch.render(walls.get(i).getModInst(), env);
+			if(!walls.get(i).deathWall){
+				batch.render(walls.get(i).getModInst(), env);
+			}
 		}
 	}
 	

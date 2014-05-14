@@ -39,6 +39,8 @@ public abstract class Block implements Poolable{
 	protected boolean isAlive;
 	protected int hits;
 	
+	public static final int crystalsDropped = 5;
+	
 	public Block(){
 		modInst = null;
 		body = null; 
@@ -60,7 +62,7 @@ public abstract class Block implements Poolable{
 	}
 	
 	public void updateModel(){
-		modInst.transform.setToTranslation(JazzCore.get3D(body.getPosition())).rotate(JazzCore.axis, body.getAngle()*MathUtils.radiansToDegrees);
+		modInst.transform.setToTranslation(JazzGame.get3D(body.getPosition())).rotate(JazzGame.axis, body.getAngle()*MathUtils.radiansToDegrees);
 	}
 	
 	public void rotate(float angle){
@@ -110,5 +112,7 @@ public abstract class Block implements Poolable{
 		this.body = body;
 	}
 	
-	
+	public int getCrystalsDroppedAmt(){
+		return crystalsDropped;
+	}
 }

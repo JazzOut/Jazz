@@ -48,7 +48,7 @@ public abstract class Ball implements Poolable{
 	public abstract void update();
 	
 	public void updateModel(){
-		modInst.transform.setToTranslation(JazzCore.get3D(body.getPosition())).rotate(JazzCore.axis, body.getAngle()*MathUtils.radiansToDegrees);
+		modInst.transform.setToTranslation(JazzGame.get3D(body.getPosition())).rotate(JazzGame.axis, body.getAngle()*MathUtils.radiansToDegrees);
 	}
 	
 	public void setSpeed(Vector2 speed){

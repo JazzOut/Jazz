@@ -24,9 +24,11 @@ public class Paddle {
 	private Body body;
 	private float lastMove;
 	private int force;
+	protected float score;
 	
 	public Paddle(){
 		modInst = null;
+		score = 0;
 	}
 	
 	public World init(World world, Vector2 pos, float lower, float upper){
@@ -36,7 +38,9 @@ public class Paddle {
 		force = 0;
 		
 		this.modInst = new ModelInstance(getModel());
+		
 		body = world.createBody(bodyDef);
+		
 		PrismaticJointDef prisDef = new PrismaticJointDef();
 		prisDef.bodyA = body;
 		bodyDef.type = BodyType.StaticBody;
@@ -51,7 +55,6 @@ public class Paddle {
 		
 
 		body.createFixture(createFixtureDef(10, 0, 0));
-//		bodB.createFixture(createFixtureDef(10, 0, 0));
 		body.setUserData(this);
 		world.createJoint(prisDef);
 		//body.setLinearDamping(100000);
@@ -62,16 +65,16 @@ public class Paddle {
 		
 		if(paddleModel == null){
 			AssetManager assets = new AssetManager();
-			assets.load("data/paddle.g3db", Model.class);
+			assets.load("data/Paddle.g3db", Model.class);
 			assets.finishLoading();
-			paddleModel = assets.get("data/paddle.g3db");
+			paddleModel = assets.get("data/Paddle.g3db");
 		}
 		
 		return paddleModel;
 	}
 	
 	public void updateModel(){
-		modInst.transform.setToTranslation(JazzCore.get3D(body.getPosition())).rotate(JazzCore.axis, body.getAngle()*MathUtils.radiansToDegrees);
+		modInst.transform.setToTranslation(JazzGame.get3D(body.getPosition())).rotate(JazzGame.axis, body.getAngle()*MathUtils.radiansToDegrees);
 	}
 	
 	public void setPull(){
@@ -132,6 +135,7 @@ public class Paddle {
 	private FixtureDef createFixtureDef(float density, float friction, float restitution){
 		FixtureDef fix = new FixtureDef();
 		fix.density = density;
+		fix.filter.categoryBits = 2;
 		fix.friction = friction;
 		fix.restitution = restitution;
 		

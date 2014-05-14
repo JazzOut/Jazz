@@ -46,16 +46,16 @@ public class StarLayer {
 	public void render(ModelBatch batch, Environment env){
 		for(Star s : stars){
 			s.move(direction);
-			s.getModInst().transform.getTranslation(JazzCore.threeD);
-			if(JazzCore.threeD.x > x+w){
+			s.getModInst().transform.getTranslation(JazzGame.threeD);
+			if(JazzGame.threeD.x > x+w){
 				s.move(new Vector2(-w, 0));
-			}else if(JazzCore.threeD.x < x){
+			}else if(JazzGame.threeD.x < x){
 				s.move(new Vector2(w, 0));
 			}
 			
-			if(JazzCore.threeD.y > y+w){
+			if(JazzGame.threeD.y > y+w){
 				s.move(new Vector2(0, -h));
-			}else if(JazzCore.threeD.y < y){
+			}else if(JazzGame.threeD.y < y){
 				s.move(new Vector2(0, h));
 			}
 			

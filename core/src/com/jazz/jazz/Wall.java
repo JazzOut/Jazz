@@ -28,16 +28,29 @@ public class Wall {
 		wallBodyDef.type = bodyType;
 		wallBodyDef.position.set(pos);
 		this.modInst = modInst;
+		fix.filter.categoryBits = 2;
 		body = world.createBody(wallBodyDef);
-		body.createFixture(fix);
+		if(deathWall){
+			FixtureDef fix2 = new FixtureDef();
+			fix2.density = fix.density;
+			fix2.restitution = fix.restitution;
+			fix2.friction = fix.friction;
+			fix2.shape = fix.shape;
+			fix2.filter.categoryBits = fix.filter.categoryBits;
+			fix2.isSensor = true;
+			body.createFixture(fix2);
+		}else{
+			body.createFixture(fix);
+		}
 		body.setUserData(this);
 		updateModel();
 		this.deathWall = deathWall;
+
 		return world;
 	}
 	
 	public void updateModel(){
-		modInst.transform.setToTranslation(JazzCore.get3D(body.getPosition())).rotate(JazzCore.axis, body.getAngle()*MathUtils.radiansToDegrees);
+		modInst.transform.setToTranslation(JazzGame.get3D(body.getPosition())).rotate(JazzGame.axis, body.getAngle()*MathUtils.radiansToDegrees);
 	}
 	
 	public void dispose(){
