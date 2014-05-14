@@ -39,7 +39,7 @@ public abstract class Block implements Poolable{
 	protected boolean isAlive;
 	protected int hits;
 	
-	public static final int crystalsDropped = 5;
+	private final int crystalsDropped = 5;
 	
 	public Block(){
 		modInst = null;

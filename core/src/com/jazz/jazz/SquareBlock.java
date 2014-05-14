@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class SquareBlock extends StandardBlock {
 
+	private final int crystalsDropped = 3;
+	
 	public SquareBlock(){
 		super();
 	}
@@ -17,5 +19,9 @@ public class SquareBlock extends StandardBlock {
 				BlockTypes.SQUARE_REG_BLOCK.getFixtureDef(), pos, getMaxHits());
 		
 		return world;
+	}
+	
+	public int getCrystalsDroppedAmt(){
+		return crystalsDropped;
 	}
 }

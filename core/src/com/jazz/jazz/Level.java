@@ -15,6 +15,7 @@ public abstract class Level {
 	protected Boundaries bound;
 	protected Array<Ball> balls;
 	protected Array<Crystal> crystals = new Array<Crystal>();
+	protected boolean levelOver;
 	
 	public Level(){
 
@@ -66,7 +67,7 @@ public abstract class Level {
 					for(int o = 0; o < add; o++){
 						c = Crystal.crystalPool.obtain();
 						c.init(world, block.getBody().getPosition().add(rnd.nextFloat()/64, rnd.nextFloat()/64));
-						c.body.applyLinearImpulse(rnd.nextFloat()*4-2, rnd.nextFloat()*4-2, paddle.getBody().getPosition().x, paddle.getBody().getPosition().y, true);
+						c.body.setLinearVelocity(rnd.nextFloat()*100-50, rnd.nextFloat()*100-50);
 						crystals.add(c);
 					}
 					world.destroyBody(block.getBody());
@@ -163,7 +164,7 @@ public abstract class Level {
 		Vector2 dir = paddle.getBody().getPosition().sub(body.getPosition());
 		float distanceToCenter = dir.len();
 		dir = dir.nor();
-		float forceMagnitude = 50 *body.getMass()* distanceToCenter/400;
+		float forceMagnitude = 200 ;
 		body.applyForceToCenter(dir.scl(forceMagnitude), true);
 		return dir.scl(forceMagnitude);
 	}

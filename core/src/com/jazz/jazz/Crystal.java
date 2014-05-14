@@ -1,5 +1,7 @@
 package com.jazz.jazz;
 
+import java.util.Random;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
@@ -7,8 +9,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Pool;
@@ -26,6 +28,7 @@ public class Crystal implements Poolable{
 	
 	public static Model crystalModel;
 	public static FixtureDef fix = new FixtureDef();
+	private static Random ran = new Random();
 	public static BodyDef crystalDef = new BodyDef();
 	public ModelInstance modInst;
 	protected Body body;
@@ -45,17 +48,18 @@ public class Crystal implements Poolable{
 		
 		fix.density = 10;
 		fix.friction = 0;
-		fix.restitution = 0;
+		fix.restitution = 1;
 		
 		fix.shape = new CircleShape();
 		fix.shape.setRadius(2);
-		fix.filter.categoryBits =2;
+		fix.filter.categoryBits =4;
 		fix.filter.maskBits = 2;
 		//fix.isSensor = true;
 		body.createFixture(fix);
 		body.setUserData(this);
 		isAlive = true;
 		collected = false;
+		//body.applyAngularImpulse(ran.nextFloat()*10-5, true);
 		
 		return world;
 	}

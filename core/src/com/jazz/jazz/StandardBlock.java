@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.World;
 public class StandardBlock extends Block {
 
 	private final int MAXHITS = 1;
+
+	private final int crystalsDropped = 5;
 	
 	public StandardBlock() {
 		super();
@@ -22,6 +24,10 @@ public class StandardBlock extends Block {
 	
 	protected int getMaxHits(){
 		return MAXHITS;
+	}
+	
+	public int getCrystalsDroppedAmt(){
+		return crystalsDropped;
 	}
 
 }
