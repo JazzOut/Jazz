@@ -55,6 +55,19 @@ public abstract class Ball implements Poolable{
 		this.speed = speed;
 	}
 	
+	public void setPosition(Vector2 pos){
+		setPosition(pos.x, pos.y);
+	}
+	
+	public void setPosition(float x, float y){
+		body.setTransform(x, y, body.getAngle());
+		updateModel();
+	}
+	
+	public void unlock(){
+		isLockedToPaddle = false;
+	}
+	
 	
 	@Override
 	public void reset() {

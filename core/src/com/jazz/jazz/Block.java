@@ -90,6 +90,10 @@ public abstract class Block implements Poolable{
 		
 	}
 	
+	public void hit(){
+		hits--;
+	}
+	
 	public ModelInstance getModInst() {
 		return modInst;
 	}

@@ -17,9 +17,10 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 public enum BlockTypes {
 	
 
-	//SMALL_CIRCLE(new ModelBuilder().createSphere(2, 2, 2, 19, 19, new Material(), Usage.Normal | Usage.Position, 0, 360, 0, 360), "sphere", BodyType.DynamicBody, 10f, 0f, 1f),
-	SMALL_CIRCLE(getModel("data/Ball.g3db"), "sphere", BodyType.DynamicBody, 10f, 0f, 1f),
+	SMALL_CIRCLE(new ModelBuilder().createSphere(5, 5, 5, 19, 19, new Material(), Usage.Normal | Usage.Position, 0, 360, 0, 360), "sphere", BodyType.DynamicBody, 10f, 0f, 1f),
+	//SMALL_CIRCLE(getModel("data/Ball.g3db"), "sphere", BodyType.DynamicBody, 10f, 0f, 1f),
 	REG_BLOCK(new ModelBuilder().createBox(10, 5, 5, new Material(ColorAttribute.createDiffuse(Color.BLUE)), Usage.Normal | Usage.Position), "rectangle", BodyType.StaticBody, 10f, .5f, 0f),
+	SQUARE_REG_BLOCK(new ModelBuilder().createBox(5, 5, 5, new Material(ColorAttribute.createDiffuse(Color.RED)), Usage.Normal | Usage.Position), "rectangle", BodyType.StaticBody, 10f, .5f, 0f),
 	HARD_BLOCK(new ModelBuilder().createBox(10, 5, 5, new Material(ColorAttribute.createDiffuse(Color.GREEN)),Usage.Position | Usage.Normal), "rectangle", BodyType.StaticBody, 10f, .5f, 0f),
 	WALL(new ModelBuilder().createBox(5, 200, 5, new Material(), Usage.Normal | Usage.Position), "rectangle",BodyType.StaticBody, 0,0,0),
 	DEATH_WALL(new ModelBuilder().createBox(5, 200, 5, new Material(ColorAttribute.createDiffuse(Color.CLEAR)), Usage.Normal | Usage.Position), "rectangle",BodyType.StaticBody, 0,0,0),

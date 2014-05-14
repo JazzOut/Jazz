@@ -21,7 +21,7 @@ public class GameCollision implements ContactListener {
 		
 		if(a.getUserData() instanceof Ball){
 			if(b.getUserData() instanceof Block){
-				((Block)b.getUserData()).hits--;
+				((Block)b.getUserData()).hit();
 				if(((Block)b.getUserData()).hits <= 0){
 					((Block)b.getUserData()).isAlive = false;
 				}
@@ -36,7 +36,7 @@ public class GameCollision implements ContactListener {
 		}
 		else if(b.getUserData() instanceof Ball){
 			if(a.getUserData() instanceof Block){
-				((Block)a.getUserData()).hits--;
+				((Block)a.getUserData()).hit();
 				if(((Block)a.getUserData()).hits <= 0){
 					((Block)a.getUserData()).isAlive = false;
 				}

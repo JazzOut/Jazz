@@ -28,18 +28,31 @@ public class Paddle {
 		modInst = null;
 	}
 	
-	public World init(World world, Vector2 pos){
+	public World init(World world, Vector2 pos, float lower, float upper){
 		
 		bodyDef.type = BodyType.KinematicBody;
 		bodyDef.position.set(pos);
+		
 		this.modInst = new ModelInstance(getModel());
 		body = world.createBody(bodyDef);
-		PrismaticJointDef prisDef;
-		prisDef = new PrismaticJointDef();
+		PrismaticJointDef prisDef = new PrismaticJointDef();
+		prisDef.bodyA = body;
+		bodyDef.type = BodyType.StaticBody;
+		Body bodB = world.createBody(bodyDef);
+		prisDef.initialize(body, bodB, pos, new Vector2(0,1));
+		prisDef.lowerTranslation = -1;
+		prisDef.upperTranslation = 1;
+		prisDef.enableLimit = true;
+//		prisDef.collideConnected = true;
+		
+		
+		
 
 		body.createFixture(createFixtureDef(10, 0, 0));
+//		bodB.createFixture(createFixtureDef(10, 0, 0));
 		body.setUserData(this);
-		body.setLinearDamping(100000);
+		world.createJoint(prisDef);
+		body.setLinearDamping(0);
 		return world;
 	}
 	
@@ -86,9 +99,9 @@ public class Paddle {
 	}
 	
 	public void mouseY(float y){
-		body.setLinearVelocity(0, y*10);
+		body.applyLinearImpulse(new Vector2(0,y), new Vector2(0,0), true);
 		updateModel();
-		lastMove = y*10;
+		lastMove = y*1000;
 	}
 
 	public void setBody(Body body) {

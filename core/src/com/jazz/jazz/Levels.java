@@ -19,6 +19,13 @@ public enum Levels {
 		}
 	};
 	
+	public static final Pool<SquareBlock> squareBlockPool = new Pool<SquareBlock>() {
+		@Override
+		protected SquareBlock newObject() {
+			return new SquareBlock();
+		}
+	};
+	
 	public static final Pool<HardBlock> hardBlockPool = new Pool<HardBlock>() {
 		@Override
 		protected HardBlock newObject() {

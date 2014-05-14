@@ -3,6 +3,7 @@ package com.jazz.jazz;
 //github.com/JazzOut/Jazz.git
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -39,7 +40,6 @@ public class JazzCore extends ApplicationAdapter {
 	public Box2DDebugRenderer render;
 	public World world;
 	public DirectionalLight light;
-	public Boundaries bound;
 	Array<Level> levels;
 	private int currLevel;
 	Array<StarLayer> stars;
@@ -99,7 +99,7 @@ public class JazzCore extends ApplicationAdapter {
 		}
 		
 		paddle = new Paddle();
-		paddle.init(world, new Vector2(10,100));
+		paddle.init(world, new Vector2(10,100), 10,10 );
 		lastY = Gdx.input.getY();
 		
 		render = new Box2DDebugRenderer();
@@ -115,23 +115,22 @@ public class JazzCore extends ApplicationAdapter {
 		threeD.set(0,Gdx.input.getY() , 0);
 		cam.project(threeD);
 		
-		//Ray ray = cam.getPickRay(Gdx.input.getX(), Gdx.input.getY());
-		//final float distance = -ray.origin.x / ray.direction.x;
-		//threeD.set(ray.direction).scl(distance).add(ray.origin);
-		
-		paddle.mouseY((lastY - Gdx.input.getY()));
-		lastY = Gdx.input.getY();
-		//paddle.getModInst().transform.setTranslation(threeD);
-	//	System.out.println(Gdx.app.getGraphics().getHeight());
-		//System.out.println(Gdx.input.getY());
-		//System.out.println(threeD.x + " " + threeD.y + " " + threeD.z );
-		//System.out.println(Gdx.input.getX() + " " + Gdx.input.getY());
-		
-		
+//		if(lastY != Gdx.input.getY()){
+			paddle.mouseY((lastY - Gdx.input.getY()));
+			lastY = Gdx.input.getY();
+//		}
+			//else{
+//			paddle.mouseY(0);
+//		}
+
+		boolean unlock = false;
+		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+			unlock = true;
+		}
 
 		world.step(1 / 60f, 5, 2);
 		modelBatch.begin(cam);
-			levels.get(currLevel).render(modelBatch, world, environment, paddle);
+			levels.get(currLevel).render(modelBatch, world, environment, paddle, unlock);
 			for(StarLayer s : stars){
 				s.render(modelBatch, environment);
 			
@@ -139,7 +138,7 @@ public class JazzCore extends ApplicationAdapter {
 			paddle.updateModel();
 			modelBatch.render(paddle.getModInst(), environment);
 		modelBatch.end();
-		//render.render(world, cam.combined);
+		render.render(world, cam.combined);
 		
 	}
 

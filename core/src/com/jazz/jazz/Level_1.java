@@ -24,11 +24,17 @@ public class Level_1 extends Level {
 		Block block;
 		Random rnd = new Random();
 		Vector2 pos = new Vector2();
+		float tmp = 0;
 		for (int j = 0; j < columCount; j++) {
 			for (int i = 0; i < rowCount; i++) {
-				if(rnd.nextFloat() < .5){
+				tmp = rnd.nextFloat();
+				if(tmp < .1){
 					block = Levels.standardBlockPool.obtain();
 					world = ((StandardBlock) block).init(world,
+							pos.set(i * 10 + 100, j * 15 + 10));
+				}else if(tmp > .1 && tmp < .7){
+					block = Levels.squareBlockPool.obtain();
+					world = ((SquareBlock) block).init(world,
 							pos.set(i * 10 + 100, j * 15 + 10));
 				}else{
 					block = Levels.hardBlockPool.obtain();

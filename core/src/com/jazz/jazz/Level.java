@@ -20,7 +20,7 @@ public abstract class Level {
 	
 	public abstract World create(World world);
 	
-	public World render(ModelBatch modelBatch, World world, Environment environment, Paddle paddle){
+	public World render(ModelBatch modelBatch, World world, Environment environment, Paddle paddle, boolean unlock){
 		//balls = new Array<Ball>();
 
 		
@@ -30,6 +30,12 @@ public abstract class Level {
 			Ball b;
 			for(int i = 0; i < balls.size; i++){
 				b = balls.get(i);
+				if(unlock){
+					b.unlock();
+				}
+				if(b.isLockedToPaddle){
+					b.setPosition(paddle.getBody().getPosition().x + 10, paddle.getBody().getPosition().y );
+				}
 				if(!b.isAlive){
 					balls.removeIndex(i);
 					world.destroyBody(b.body);
