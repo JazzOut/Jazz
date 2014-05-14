@@ -4,7 +4,8 @@ import com.badlogic.gdx.utils.Pool;
 
 public enum Levels {
 	
-	LEVEL_1(new Level_1());
+	//LEVEL_1(new Level_1()),
+	LEVEL_2(new Level_2());
 
 	private Level level;
 	
