@@ -81,7 +81,7 @@ public class JazzGame implements Screen{
 		for(Levels l : levs){
 			levels.add(l.getLevel());
 		}
-		currLevel = 0;
+		currLevel = 4;
 
 		world = new World(new Vector2(0, 0), true);
 		world.setContactListener(new GameCollision());

@@ -28,7 +28,11 @@ public class Level_3 extends Level {
 		for (int i = 0; i < columnCount; i++) {
 			for (int j = 0; j < rowCount; j++) {
 				if(j<startSkip[i] || j>(startSkip[i]+skip)) {
-					block = Levels.standardBlockPool.obtain();
+					if(j==startSkip[i]-1||j==startSkip[i]+skip+1){
+						block = Levels.hardBlockPool.obtain();
+					}else{
+						block = Levels.standardBlockPool.obtain();
+					}
 					world = ((StandardBlock) block).init(world,
 					pos.set(i * 15 + 100, j * 15 + 10));
 
