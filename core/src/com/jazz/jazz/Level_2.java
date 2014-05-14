@@ -28,256 +28,375 @@ public class Level_2 extends Level {
 		
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(8 * 10 + 100, 0 * 14 + 10));
+				pos.set(8 * 13 + 100, 0 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(7 * 10 + 100, 0 * 14 + 10));
+				pos.set(7 * 13 + 100, 0 * 14 + 10));
+		block.rotate(135);
+		block.updateModel();
+		activeBlocks.add(block);
+//		block = Levels.standardBlockPool.obtain();
+//		world = ((StandardBlock) block).init(world,
+//				pos.set(6 * 13 + 100, 0 * 14 + 10));
+//		block.rotate(90);
+//		block.updateModel();
+//		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(0 * 13 + 100, 2 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(6 * 10 + 100, 0 * 14 + 10));
+				pos.set(6 * 13 + 100, 1 * 14 + 10));
+		block.rotate(135);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(8 * 13 + 100, 4 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(0 * 10 + 100, 2 * 14 + 10));
+				pos.set(1 * 13 + 100, 1 * 14 + 10));
+		block.rotate(45);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(2 * 13 + 100, 2 * 14 + 10));
+		block.rotate(45);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(5 * 13 + 100, 2 * 14 + 10));
+		block.rotate(135);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(8 * 13 + 100, 2 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(6 * 10 + 100, 1 * 14 + 10));
+				pos.set(0 * 13 + 100, 3 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(8 * 10 + 100, 4 * 14 + 10));
+				pos.set(3 * 13 + 100, 3 * 14 + 10));
+		block.rotate(45);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(4 * 13 + 100, 3 * 14 + 10));
+		block.rotate(135);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(8 * 13 + 100, 3 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(1 * 10 + 100, 2 * 14 + 10));
+				pos.set(1 * 13 + 100, 4 * 14 + 10));
+		block.rotate(45);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(8 * 13 + 100, 1 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(2 * 10 + 100, 2 * 14 + 10));
+				pos.set(2 * 13 + 100, 5 * 14 + 10));
+		block.rotate(45);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(9 * 13 + 100, 4 * 14 + 10));
+		block.rotate(45);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(3 * 13 + 100, 6 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(5 * 10 + 100, 2 * 14 + 10));
+				pos.set(11 * 13 + 100, 6 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(8 * 10 + 100, 2 * 14 + 10));
+				pos.set(2 * 13 + 100, 7 * 14 + 10));
+		block.rotate(135);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(10 * 13 + 100, 5 * 14 + 10));
+		block.rotate(45);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(10 * 13 + 100,7 * 14 + 10));
+		block.rotate(135);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(1 * 13 + 100, 8 * 14 + 10));
+		block.rotate(135);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(8 * 13 + 100, 8 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(0 * 10 + 100, 3 * 14 + 10));
+				pos.set(9 * 13 + 100, 8 * 14 + 10));
+		block.rotate(135);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(0 * 13 + 100, 9 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(3 * 10 + 100, 3 * 14 + 10));
+				pos.set(3 * 13 + 100, 9 * 14 + 10));
+		block.rotate(135);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(4 * 13 + 100, 9 * 14 + 10));
+		block.rotate(45);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(8 * 13 + 100, 9 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(4 * 10 + 100, 3 * 14 + 10));
+				pos.set(0 * 13 + 100, 10 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(8 * 10 + 100, 3 * 14 + 10));
+				pos.set(1 * 13 + 100, 11 * 14 + 10));
+		block.rotate(135);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(2 * 13 + 100, 10 * 14 + 10));
+		block.rotate(135);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(5 * 13 + 100, 10 * 14 + 10));
+		block.rotate(45);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(8 * 13 + 100, 10 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(1 * 10 + 100, 4 * 14 + 10));
+				pos.set(6 * 13 + 100, 11 * 14 + 10));
+		block.rotate(45);
+		block.updateModel();
+		activeBlocks.add(block);
+//		block = Levels.standardBlockPool.obtain();
+//		world = ((StandardBlock) block).init(world,
+//				pos.set(6 * 13 + 100, 12 * 14 + 10));
+//		block.rotate(90);
+//		block.updateModel();
+//		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(7 * 13 + 100, 12 * 14 + 10));
+		block.rotate(45);
+		block.updateModel();
+		activeBlocks.add(block);
+		block = Levels.standardBlockPool.obtain();
+		world = ((StandardBlock) block).init(world,
+				pos.set(8 * 13 + 100, 11 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(8 * 10 + 100, 1 * 14 + 10));
+				pos.set(8 * 13 + 100, 12 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(2 * 10 + 100, 5 * 14 + 10));
+				pos.set(0 * 13 + 100, 1 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
 		block = Levels.standardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(9 * 10 + 100, 5 * 14 + 10));
+				pos.set(0 * 13 + 100, 11 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(11 * 10 + 100, 5 * 14 + 10));
+				pos.set(1 * 13 + 100, 10 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(2 * 10 + 100, 6 * 14 + 10));
+				pos.set(2 * 13 + 100, 9 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(12 * 10 + 100, 6 * 14 + 10));
+				pos.set(3 * 13 + 100, 8 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(2 * 10 + 100, 7 * 14 + 10));
+				pos.set(1 * 13 + 100, 2 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(10 * 10 + 100, 5 * 14 + 10));
+				pos.set(2 * 13 + 100, 3 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(11 * 10 + 100,7 * 14 + 10));
+				pos.set(3 * 13 + 100, 4 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(10 * 10 + 100,7 * 14 + 10));
+				pos.set(5 * 13 + 100, 9 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(1 * 10 + 100, 8 * 14 + 10));
+				pos.set(6 * 13 + 100, 10 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(8 * 10 + 100, 8 * 14 + 10));
+				pos.set(7 * 13 + 100, 11 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(9 * 10 + 100, 7 * 14 + 10));
+				pos.set(6 * 13 + 100, 9 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(0 * 10 + 100, 9 * 14 + 10));
+				pos.set(7 * 13 + 100, 10 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(3 * 10 + 100, 9 * 14 + 10));
+				pos.set(7 * 13 + 100, 9 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(4 * 10 + 100, 9 * 14 + 10));
+				pos.set(5 * 13 + 100, 3 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(8 * 10 + 100, 9 * 14 + 10));
+				pos.set(6 * 13 + 100, 3 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(0 * 10 + 100, 10 * 14 + 10));
+				pos.set(7 * 13 + 100, 3 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(1 * 10 + 100, 10 * 14 + 10));
+				pos.set(6 * 13 + 100, 2 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(2 * 10 + 100, 10 * 14 + 10));
+				pos.set(7 * 13 + 100, 2 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
+		block = Levels.squareBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
-				pos.set(5 * 10 + 100, 10 * 14 + 10));
+				pos.set(7 * 13 + 100, 1 * 14 + 10));
 		block.rotate(90);
 		block.updateModel();
 		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
-		world = ((StandardBlock) block).init(world,
-				pos.set(8 * 10 + 100, 10 * 14 + 10));
-		block.rotate(90);
-		block.updateModel();
-		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
-		world = ((StandardBlock) block).init(world,
-				pos.set(6 * 10 + 100, 11 * 14 + 10));
-		block.rotate(90);
-		block.updateModel();
-		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
-		world = ((StandardBlock) block).init(world,
-				pos.set(6 * 10 + 100, 12 * 14 + 10));
-		block.rotate(90);
-		block.updateModel();
-		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
-		world = ((StandardBlock) block).init(world,
-				pos.set(7 * 10 + 100, 12 * 14 + 10));
-		block.rotate(90);
-		block.updateModel();
-		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
-		world = ((StandardBlock) block).init(world,
-				pos.set(8 * 10 + 100, 11 * 14 + 10));
-		block.rotate(90);
-		block.updateModel();
-		activeBlocks.add(block);
-		block = Levels.standardBlockPool.obtain();
-		world = ((StandardBlock) block).init(world,
-				pos.set(8 * 10 + 100, 12 * 14 + 10));
-		block.rotate(90);
-		block.updateModel();
-		activeBlocks.add(block);
+		
+		for(int i = 4; i < 8; i++){
+			for(int j = 4; j < 9; j++){
+				block = Levels.hardBlockPool.obtain();
+				world = ((StandardBlock) block).init(world,
+						pos.set(i * 13 + 100, j * 14 + 10));
+				block.rotate(90);
+				block.updateModel();
+				activeBlocks.add(block);
+			}
+		}
 /*		block = Levels.hardBlockPool.obtain();
 		world = ((StandardBlock) block).init(world,
 				pos.set(i * 10 + 100, j * 15 + 10));
