@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.jazz.jazz.JazzCore;
  
 public class MainMenu implements Screen {
@@ -28,8 +29,6 @@ public class MainMenu implements Screen {
         private BitmapFont white, black, color; //done
         private Label heading;
        
-       
- 
         @Override
         public void render(float delta) {
                 Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -42,7 +41,8 @@ public class MainMenu implements Screen {
  
         @Override
         public void resize(int width, int height) {
-               
+        	//stage.getViewport().update(width, height, true);
+        	stage.getViewport().update(width, height, false);
         }
  
         @Override
@@ -92,7 +92,7 @@ public class MainMenu implements Screen {
                 //LabelStyle headingStyle = ; 
                 
                 heading = new Label("JazzCore", new LabelStyle(color, Color.CYAN));
-                heading.setFontScale(2);
+                heading.setFontScale(1);
                 
                 //putting stuff together
                 table.add(heading);
@@ -102,6 +102,7 @@ public class MainMenu implements Screen {
                 table.getCell(buttonPlay).spaceBottom(20);
                 table.row();
                 table.add(buttonExit);
+                table.row();
                 table.debug();
                 stage.addActor(table);
                 

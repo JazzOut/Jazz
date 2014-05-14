@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jazz.jazz.JazzCore;
+import com.jazz.jazz.JazzGame;
  
 public class PauseMenu implements Screen {
        
@@ -28,8 +29,6 @@ public class PauseMenu implements Screen {
         private BitmapFont white, black, color; //done
         private Label heading;
        
-       
- 
         @Override
         public void render(float delta) {
                 Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -37,16 +36,16 @@ public class PauseMenu implements Screen {
                
                 stage.act(delta);
                 stage.draw();
- 
         }
  
         @Override
         public void resize(int width, int height) {
-               
+        	stage.getViewport().update(width, height, true);
         }
  
         @Override
         public void show() {
+        	Gdx.input.setCursorCatched(false);
                 stage = new Stage();
                
                 atlas = new TextureAtlas("ui/button.pack");
@@ -82,9 +81,8 @@ public class PauseMenu implements Screen {
                 buttonResume.addListener(new ClickListener() {
                 	@Override
                 	public void clicked(InputEvent event, float x, float y) {
-                		/*((Game) Gdx.app.getApplicationListener()).setScreen(new Levels() {
-                			//continue to play game
-                		});*/
+                		System.out.println("clicked");
+                		pause();
                 	}
                 });
                 buttonResume.pad(15);
@@ -93,7 +91,7 @@ public class PauseMenu implements Screen {
                 //LabelStyle headingStyle = ; 
                 
                 heading = new Label("Paused", new LabelStyle(color, Color.CYAN));
-                heading.setFontScale(2);
+                heading.setFontScale(1);
                 
                 //putting stuff together
                 table.add(heading);
@@ -103,6 +101,7 @@ public class PauseMenu implements Screen {
                 table.getCell(buttonResume).spaceBottom(20);
                 table.row();
                 table.add(buttonQuit);
+                table.row();
                 table.debug();
                 stage.addActor(table);
                 
@@ -112,18 +111,17 @@ public class PauseMenu implements Screen {
         @Override
         public void hide() {
                
- 
         }
  
         @Override
         public void pause() {
-               
- 
+        	((Game) Gdx.app.getApplicationListener()).setScreen(JazzCore.jazzGame);
+
         }
  
         @Override
         public void resume() {
- 
+        	
         }
  
         @Override

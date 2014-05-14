@@ -1,5 +1,6 @@
 package com.jazz.jazz;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -17,8 +18,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.jazz.jazz.screens.PauseMenu;
 
 public class JazzGame implements Screen{
+	public static PauseMenu pauseMenu = new PauseMenu();
 	public static Vector3 threeD = new Vector3(0, 0, 0);
 	public static final Vector3 axis = new Vector3(0, 0, 1);
 	public static final Vector2 tmp = new Vector2(0, 0);
@@ -105,6 +108,10 @@ public class JazzGame implements Screen{
 
 	@Override
 	public void render(float delta) {
+		if (Gdx.input.isKeyPressed(Input.Keys.P)){
+			pause();
+			
+		}
 		camController.update();
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -150,6 +157,8 @@ public class JazzGame implements Screen{
 		
 	}
 
+
+
 	public static Vector3 get3D(Vector2 twoD) {
 		return threeD.set(twoD.x, twoD.y, 0);
 
@@ -182,13 +191,11 @@ public class JazzGame implements Screen{
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		
+		((Game) Gdx.app.getApplicationListener()).setScreen(pauseMenu);
 	}
 
-	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
+		Gdx.input.setCursorCatched(true);
 		
 	}
 
