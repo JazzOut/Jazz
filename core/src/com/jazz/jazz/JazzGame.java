@@ -85,13 +85,15 @@ public class JazzGame implements Screen{
 
 		modelBatch = new ModelBatch();
 
+//		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(),
+//				Gdx.graphics.getHeight());
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight());
 		// cam = new OrthographicCamera(Gdx.graphics.getWidth(),
 		// Gdx.graphics.getHeight());
 		cam.position.set(150f, 100f, 400f);
 		
-		// cam.lookAt(0,0,0);
+		//cam.lookAt(150,0,0);
 		cam.near = 1f;
 		cam.far = 5000f;
 		cam.update();
@@ -115,7 +117,7 @@ public class JazzGame implements Screen{
 		
 		stars = new Array<StarLayer>();
 		StarLayer starL;
-		for(int i = 0; i<10; i++){
+		for(int i = 0; i<6; i++){
 			starL = new StarLayer();
 			starL.init(600, -500-100*i, 100);
 			stars.add(starL);
@@ -130,6 +132,7 @@ public class JazzGame implements Screen{
 
 	@Override
 	public void render(float delta) {
+
 		if (Gdx.input.isKeyPressed(Input.Keys.P)){
 			pause();
 			
@@ -159,12 +162,10 @@ public class JazzGame implements Screen{
 			pushingD = false;
 		}
 		camController.update();
-
+		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-		threeD.set(0,Gdx.input.getY() , 0);
-		cam.project(threeD);
 		
 		if(lastY != Gdx.input.getY()){
 			paddle.getBody().setLinearDamping(0);
@@ -198,8 +199,10 @@ public class JazzGame implements Screen{
 			}
 			paddle.updateModel();
 			textBatch.begin();
-			if(levels.get(currLevel).levelOver || levels.get(currLevel).ballsDead){
+			if(levels.get(currLevel).ballsDead){
 				font.draw(textBatch, "You lost, new level in "+ Integer.toString(3-(int)time) +" seconds!", 210, 15);
+			}else if(levels.get(currLevel).levelOver){
+				font.draw(textBatch, "Good Job, new level in "+ Integer.toString(3-(int)time) +" seconds!", 210, 15);
 			}
 			font.draw(textBatch, Integer.toString((int)paddle.score), 10, 15);
 			textBatch.end();

@@ -101,7 +101,7 @@ public abstract class Level {
 				if(!c.isAlive){
 					crystals.removeIndex(i);
 					if(c.collected){
-						paddle.score +=80;
+						paddle.score +=85;
 						crystalCollect.setVolume(crystalCollect.play(), .5f);
 					}
 					world.destroyBody(c.body);
