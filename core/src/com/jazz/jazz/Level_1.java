@@ -19,7 +19,7 @@ public class Level_1 extends Level {
 	//instantiate any objects you need here.
 	public World create(World world){
 
-		int rowCount = 10;
+		int rowCount = 20;
 		int columCount = 12;
 		Block block;
 		Random rnd = new Random();
@@ -28,11 +28,11 @@ public class Level_1 extends Level {
 		for (int j = 0; j < columCount; j++) {
 			for (int i = 0; i < rowCount; i++) {
 				tmp = rnd.nextFloat();
-				if(tmp < .1){
+				if(tmp < .5){
 					block = Levels.standardBlockPool.obtain();
 					world = ((StandardBlock) block).init(world,
 							pos.set(i * 10 + 100, j * 15 + 10));
-				}else if(tmp > .1 && tmp < .7){
+				}else if(tmp > .6 && tmp < .7){
 					block = Levels.squareBlockPool.obtain();
 					world = ((SquareBlock) block).init(world,
 							pos.set(i * 10 + 100, j * 15 + 10));

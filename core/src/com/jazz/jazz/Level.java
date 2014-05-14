@@ -15,10 +15,11 @@ public abstract class Level {
 	protected Boundaries bound;
 	protected Array<Ball> balls;
 	protected Array<Crystal> crystals = new Array<Crystal>();
-	protected boolean levelOver;
+	protected boolean levelOver = false;
+	protected boolean ballsDead = false;
 	
 	public Level(){
-
+		
 	}
 	
 	//public abstract World render(ModelBatch modelBatch, World world, Environment environment);
@@ -52,6 +53,8 @@ public abstract class Level {
 					b.update();
 				}
 			}
+		}else{
+			ballsDead = true;
 		}
 		
 		if(activeBlocks.size != 0){
@@ -73,6 +76,8 @@ public abstract class Level {
 					world.destroyBody(block.getBody());
 					if(block instanceof HardBlock){
 						Levels.hardBlockPool.free((HardBlock) block);
+					}else if(block instanceof SquareBlock){
+						Levels.squareBlockPool.free((SquareBlock) block);
 					}else if(block instanceof StandardBlock){
 						Levels.standardBlockPool.free((StandardBlock) block);
 					}
@@ -81,6 +86,8 @@ public abstract class Level {
 					//block.updateModel();
 				}
 			}
+		}else{
+			levelOver = true;
 		}
 		
 		if(crystals.size != 0){
@@ -124,26 +131,24 @@ public abstract class Level {
 			}
 		}
 		
-		if(activeBlocks.size == 0){
-			return world;
-		}
 
-		Block block;
-		for (int i = 0; i < activeBlocks.size; i++) {
-			
-			block = activeBlocks.get(i);
-			block.updateModel();
-			modelBatch.render(block.getModInst(), environment);
+		if(activeBlocks.size !=0){
+			Block block;
+			for (int i = 0; i < activeBlocks.size; i++) {
+				
+				block = activeBlocks.get(i);
+				block.updateModel();
+				modelBatch.render(block.getModInst(), environment);
+			}
 		}
-		
+	
 		Crystal crystal;
 		for(int i= 0; i < crystals.size; i++){
 			crystal = crystals.get(i);
 			crystal.updateModel();
 			modelBatch.render(crystal.getModInst(), environment);
 		}
-
-		
+	
 		
 		return world;
 	}
@@ -167,6 +172,46 @@ public abstract class Level {
 		float forceMagnitude = 200 ;
 		body.applyForceToCenter(dir.scl(forceMagnitude), true);
 		return dir.scl(forceMagnitude);
+	}
+	
+	public void destroy(World world){
+		Block block;
+		while(activeBlocks.size !=0){
+				block = activeBlocks.get(0);
+				activeBlocks.removeIndex(0);
+				world.destroyBody(block.getBody());
+				if(block instanceof HardBlock){
+					Levels.hardBlockPool.free((HardBlock) block);
+				}else if(block instanceof SquareBlock){
+					Levels.squareBlockPool.free((SquareBlock) block);
+				}else if(block instanceof StandardBlock){
+					Levels.standardBlockPool.free((StandardBlock) block);
+				}
+		}
+		
+		Crystal c;
+		while(crystals.size != 0){
+			c = crystals.get(0);
+			crystals.removeIndex(0);
+			world.destroyBody(c.body);
+			Crystal.crystalPool.free(c);
+		}
+		
+		Ball b;
+		while(balls.size != 0){
+			b = balls.get(0);
+			balls.removeIndex(0);
+			world.destroyBody(b.body);
+			if(b instanceof StandardBall){
+				Levels.standardBallPool.free((StandardBall) b);
+			}
+		
+		}
+		bound = null;
+		
+		levelOver = false;
+		ballsDead = false;
+		
 	}
 	
 	
