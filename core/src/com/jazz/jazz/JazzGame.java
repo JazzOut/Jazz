@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -45,6 +46,7 @@ public class JazzGame implements Screen{
 	Array<StarLayer> stars;
 	Paddle paddle;
 	float time;
+	Music clearSideVirus;
 	
 	private float lastY;
 
@@ -55,6 +57,9 @@ public class JazzGame implements Screen{
 	
 	public void create() {
 		time = 0;
+		
+		clearSideVirus = Gdx.audio.newMusic(Gdx.files.internal("data/ClearsideVirus.mp3"));
+		clearSideVirus.setLooping(true);
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, .4f,
 				.4f, .4f, 1f));
@@ -144,7 +149,7 @@ public class JazzGame implements Screen{
 		
 		levels.get(currLevel).update(world, paddle, unlock);
 
-		world.step(1 / 60f, 5, 2);
+		world.step(1 / 60f, 8, 2);
 		
 		modelBatch.begin(cam);
 			levels.get(currLevel).render(modelBatch, world, environment);
@@ -196,6 +201,7 @@ public class JazzGame implements Screen{
 	@Override
 	public void show() {
 		Gdx.input.setCursorCatched(true);
+		clearSideVirus.play();
 		
 	}
 
@@ -207,10 +213,12 @@ public class JazzGame implements Screen{
 
 	@Override
 	public void pause() {
+		clearSideVirus.pause();
 		((Game) Gdx.app.getApplicationListener()).setScreen(pauseMenu);
 	}
 
 	public void resume() {
+		clearSideVirus.play();
 		Gdx.input.setCursorCatched(true);
 		
 	}

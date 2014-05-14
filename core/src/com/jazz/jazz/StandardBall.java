@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class StandardBall extends Ball {
 
-	private final float MAX_SPEED = 100;
+	private final float MAX_SPEED = 150;
 	
 	public StandardBall() {
 		super();

@@ -120,7 +120,8 @@ public class Paddle {
 	}
 	
 	public void mouseY(float y){
-		y =  -y *body.getMass()*body.getMass();
+		y =  -y *body.getMass()*body.getMass()*10000;
+		System.out.println(y);
 		//body.applyLinearImpulse(0, y, body.getPosition().x, body.getPosition().y, true);
 		body.applyForceToCenter(new Vector2(0,y), true);
 //		body.setTransform(new Vector2(body.getPosition().x,body.getPosition().y +y), body.getAngle());

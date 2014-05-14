@@ -607,7 +607,7 @@ public class Level_2 extends Level {
 	
 		balls = new Array<Ball>();
 		StandardBall ball = Levels.standardBallPool.obtain();
-		ball.init(world, new Vector2(10, 50), new Vector2(2, 1));
+		ball.init(world, new Vector2(10, 50), new Vector2(2, 0));
 		ball.updateModel();
 		balls.add(ball);
 		
