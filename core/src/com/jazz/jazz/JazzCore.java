@@ -99,7 +99,7 @@ public class JazzCore extends ApplicationAdapter {
 		}
 		
 		paddle = new Paddle();
-		paddle.init(world, new Vector2(10,100), 10,10 );
+		paddle.init(world, new Vector2(10,100), -100,100 );
 		lastY = Gdx.input.getY();
 		
 		render = new Box2DDebugRenderer();
@@ -115,13 +115,15 @@ public class JazzCore extends ApplicationAdapter {
 		threeD.set(0,Gdx.input.getY() , 0);
 		cam.project(threeD);
 		
-//		if(lastY != Gdx.input.getY()){
-			paddle.mouseY((lastY - Gdx.input.getY()));
+		if(lastY != Gdx.input.getY()){
+			paddle.getBody().setLinearDamping(0);
+			paddle.mouseY(Gdx.input.getY());
+			Gdx.input.setCursorPosition(0, 0);
 			lastY = Gdx.input.getY();
-//		}
-			//else{
-//			paddle.mouseY(0);
-//		}
+		}
+		else{
+			paddle.getBody().setLinearDamping(1000000);
+		}
 
 		boolean unlock = false;
 		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
@@ -129,6 +131,7 @@ public class JazzCore extends ApplicationAdapter {
 		}
 
 		world.step(1 / 60f, 5, 2);
+		
 		modelBatch.begin(cam);
 			levels.get(currLevel).render(modelBatch, world, environment, paddle, unlock);
 			for(StarLayer s : stars){

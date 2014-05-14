@@ -27,6 +27,10 @@ public class HardBlock extends StandardBlock {
 	@Override
 	public void hit(){
 		super.hit();
+		changeMaterial();
+	}
+	
+	public void changeMaterial(){
 		getModInst().materials.get(0).set(ColorAttribute.createDiffuse(Color.BLUE));
 	}
 	
