@@ -81,14 +81,12 @@ public class JazzCore extends ApplicationAdapter {
 		for(Levels l : levs){
 			levels.add(l.getLevel());
 		}
-		currLevel = 0;
+		currLevel = 1;
 
 		world = new World(new Vector2(0, 0), true);
 		world.setContactListener(new GameCollision());
 
-		for(Level l : levels){
-			l.create(world);
-		}
+		levels.get(currLevel).create(world);
 		
 		stars = new Array<StarLayer>();
 		StarLayer starL;
@@ -128,12 +126,19 @@ public class JazzCore extends ApplicationAdapter {
 		boolean unlock = false;
 		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
 			unlock = true;
+			paddle.setPull();
+		}else if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
+			paddle.setPush();
+		}else{
+			paddle.setOff();
 		}
+		
+		levels.get(currLevel).update(world, paddle, unlock);
 
 		world.step(1 / 60f, 5, 2);
 		
 		modelBatch.begin(cam);
-			levels.get(currLevel).render(modelBatch, world, environment, paddle, unlock);
+			levels.get(currLevel).render(modelBatch, world, environment);
 			for(StarLayer s : stars){
 				s.render(modelBatch, environment);
 			

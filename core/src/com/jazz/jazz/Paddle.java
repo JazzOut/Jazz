@@ -23,6 +23,7 @@ public class Paddle {
 	private ModelInstance modInst;
 	private Body body;
 	private float lastMove;
+	private int force;
 	
 	public Paddle(){
 		modInst = null;
@@ -32,6 +33,7 @@ public class Paddle {
 		
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(pos);
+		force = 0;
 		
 		this.modInst = new ModelInstance(getModel());
 		body = world.createBody(bodyDef);
@@ -70,6 +72,22 @@ public class Paddle {
 	
 	public void updateModel(){
 		modInst.transform.setToTranslation(JazzCore.get3D(body.getPosition())).rotate(JazzCore.axis, body.getAngle()*MathUtils.radiansToDegrees);
+	}
+	
+	public void setPull(){
+		force = -1;
+	}
+	
+	public void setPush(){
+		force = 1;
+	}
+	
+	public void setOff(){
+		force = 0;
+	}
+	
+	public int getAction(){
+		return force;
 	}
 	
 	public void rotate(float angle){

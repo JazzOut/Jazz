@@ -20,12 +20,7 @@ public abstract class Level {
 	
 	public abstract World create(World world);
 	
-	public World render(ModelBatch modelBatch, World world, Environment environment, Paddle paddle, boolean unlock){
-		//balls = new Array<Ball>();
-
-		
-		bound.render(modelBatch, environment);
-		
+	public World update(World world, Paddle paddle, boolean unlock){
 		if(balls.size != 0){
 			Ball b;
 			for(int i = 0; i < balls.size; i++){
@@ -46,7 +41,6 @@ public abstract class Level {
 				}else{
 					b.update();
 					b.updateModel();
-					modelBatch.render(b.getModInst(), environment);
 				}
 			}
 		}
@@ -54,7 +48,7 @@ public abstract class Level {
 		if(activeBlocks.size == 0){
 			return world;
 		}
-		activeBlocks.get(0).getModInst().transform.getTranslation(JazzCore.threeD);
+		
 		Block block;
 		for (int i = 0; i < activeBlocks.size; i++) {
 			block = activeBlocks.get(i);
@@ -69,8 +63,36 @@ public abstract class Level {
 				i--;
 			} else {
 				block.updateModel();
-				modelBatch.render(block.getModInst(), environment);
 			}
+		}
+
+		
+		return world;
+	}
+	
+	public World render(ModelBatch modelBatch, World world, Environment environment){
+		//balls = new Array<Ball>();
+
+		
+		bound.render(modelBatch, environment);
+		
+		if(balls.size != 0){
+			Ball b;
+			for(int i = 0; i < balls.size; i++){
+				b = balls.get(i);	
+				modelBatch.render(b.getModInst(), environment);
+			}
+		}
+		
+		if(activeBlocks.size == 0){
+			return world;
+		}
+
+		Block block;
+		for (int i = 0; i < activeBlocks.size; i++) {
+			
+			block = activeBlocks.get(i);
+			modelBatch.render(block.getModInst(), environment);
 		}
 
 		
