@@ -1,5 +1,7 @@
 package com.jazz.jazz;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -30,6 +32,7 @@ public abstract class Block implements Poolable{
 	//set 3d modelinstance to body using setuserdata
 	
 	static BodyDef bodyDef = new BodyDef();
+	public static Sound collide= Gdx.audio.newSound(Gdx.files.internal("data/Woosh.mp3"));
 	private final int MAXHITS = 1;
 	
 	private ModelInstance modInst;
@@ -94,6 +97,7 @@ public abstract class Block implements Poolable{
 	
 	public void hit(){
 		hits--;
+		collide.play();
 	}
 	
 	public ModelInstance getModInst() {

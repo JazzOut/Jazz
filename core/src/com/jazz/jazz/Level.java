@@ -2,6 +2,8 @@ package com.jazz.jazz;
 
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -17,6 +19,7 @@ public abstract class Level {
 	protected Array<Crystal> crystals = new Array<Crystal>();
 	protected boolean levelOver = false;
 	protected boolean ballsDead = false;
+	public static Sound crystalCollect= Gdx.audio.newSound(Gdx.files.internal("data/Blop.mp3"));
 	
 	public Level(){
 		
@@ -27,6 +30,7 @@ public abstract class Level {
 	public abstract World create(World world);
 	
 	public World update(World world, Paddle paddle, boolean unlock){
+	
 		if(balls.size != 0){
 			Ball b;
 			for(int i = 0; i < balls.size; i++){
@@ -98,6 +102,7 @@ public abstract class Level {
 					crystals.removeIndex(i);
 					if(c.collected){
 						paddle.score +=80;
+						crystalCollect.setVolume(crystalCollect.play(), .5f);
 					}
 					world.destroyBody(c.body);
 					Crystal.crystalPool.free(c);

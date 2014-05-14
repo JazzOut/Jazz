@@ -5,9 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -50,6 +50,7 @@ public class JazzGame implements Screen{
 	Paddle paddle;
 	float time;
 	Music clearSideVirus;
+
 	private boolean pushingS;
 	private boolean pushingD;
 	private BitmapFont font;
@@ -72,7 +73,7 @@ public class JazzGame implements Screen{
 		
 		//song is Virus by Clearside. https://soundcloud.com/clearside/clearside-virus
 		//liscened under creative commons, attribution non-comercial
-		clearSideVirus = Gdx.audio.newMusic(Gdx.files.internal("data/ClearsideVirus.mp3"));
+		clearSideVirus = Gdx.audio.newMusic(Gdx.files.internal("data/ClearsideVirus.mp3")); 
 		clearSideVirus.setLooping(true);
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, .4f,
@@ -200,7 +201,7 @@ public class JazzGame implements Screen{
 			if(levels.get(currLevel).levelOver || levels.get(currLevel).ballsDead){
 				font.draw(textBatch, "You lost, new level in "+ Integer.toString(3-(int)time) +" seconds!", 210, 15);
 			}
-			font.draw(textBatch, Float.toString(paddle.score), 10, 15);
+			font.draw(textBatch, Integer.toString((int)paddle.score), 10, 15);
 			textBatch.end();
 			modelBatch.render(paddle.getModInst(), environment);
 		modelBatch.end();
