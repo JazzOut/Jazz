@@ -7,6 +7,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -47,6 +50,10 @@ public class JazzGame implements Screen{
 	Paddle paddle;
 	float time;
 	Music clearSideVirus;
+	private boolean pushingS;
+	private boolean pushingD;
+	private BitmapFont font;
+	private SpriteBatch textBatch;
 	
 	private float lastY;
 
@@ -57,7 +64,14 @@ public class JazzGame implements Screen{
 	
 	public void create() {
 		time = 0;
+		pushingS = false;
+		pushingD = false;
+		font = new BitmapFont();
+		textBatch = new SpriteBatch();
 		
+		
+		//song is Virus by Clearside. https://soundcloud.com/clearside/clearside-virus
+		//liscened under creative commons, attribution non-comercial
 		clearSideVirus = Gdx.audio.newMusic(Gdx.files.internal("data/ClearsideVirus.mp3"));
 		clearSideVirus.setLooping(true);
 		environment = new Environment();
@@ -118,6 +132,30 @@ public class JazzGame implements Screen{
 		if (Gdx.input.isKeyPressed(Input.Keys.P)){
 			pause();
 			
+		}else if(Gdx.input.isKeyPressed(Input.Keys.S) && !pushingS){
+			pushingS = true;
+			
+			levels.get(currLevel).destroy(world);
+			currLevel++;
+			if(currLevel > levels.size-1){
+				currLevel = levels.size -1;
+			}
+			levels.get(currLevel).create(world);
+			time = 0;
+		}else if(!Gdx.input.isKeyPressed(Input.Keys.S) && pushingS){
+			pushingS = false;
+		}else if(Gdx.input.isKeyPressed(Input.Keys.D) && !pushingD){
+			pushingD = true;
+			
+			levels.get(currLevel).destroy(world);
+			currLevel--;
+			if(currLevel < 0){
+				currLevel = 0;
+			}
+			levels.get(currLevel).create(world);
+			time = 0;
+		}else if(!Gdx.input.isKeyPressed(Input.Keys.D) && pushingD){
+			pushingD = false;
 		}
 		camController.update();
 
@@ -158,6 +196,12 @@ public class JazzGame implements Screen{
 			
 			}
 			paddle.updateModel();
+			textBatch.begin();
+			if(levels.get(currLevel).levelOver || levels.get(currLevel).ballsDead){
+				font.draw(textBatch, "You lost, new level in "+ Integer.toString(3-(int)time) +" seconds!", 210, 15);
+			}
+			font.draw(textBatch, Float.toString(paddle.score), 10, 15);
+			textBatch.end();
 			modelBatch.render(paddle.getModInst(), environment);
 		modelBatch.end();
 		if(levels.get(currLevel).levelOver || levels.get(currLevel).ballsDead){
