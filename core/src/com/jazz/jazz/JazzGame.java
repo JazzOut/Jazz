@@ -44,6 +44,7 @@ public class JazzGame implements Screen{
 	private int currLevel;
 	Array<StarLayer> stars;
 	Paddle paddle;
+	float time;
 	
 	private float lastY;
 
@@ -53,6 +54,7 @@ public class JazzGame implements Screen{
 	
 	
 	public void create() {
+		time = 0;
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, .4f,
 				.4f, .4f, 1f));
@@ -84,7 +86,7 @@ public class JazzGame implements Screen{
 		for(Levels l : levs){
 			levels.add(l.getLevel());
 		}
-		currLevel = 2;
+		currLevel = 0;
 
 		world = new World(new Vector2(0, 0), true);
 		world.setContactListener(new GameCollision());
@@ -153,6 +155,20 @@ public class JazzGame implements Screen{
 			paddle.updateModel();
 			modelBatch.render(paddle.getModInst(), environment);
 		modelBatch.end();
+		if(levels.get(currLevel).levelOver || levels.get(currLevel).ballsDead){
+			time +=delta;
+			System.out.println(delta);
+			if(time > 3){
+				levels.get(currLevel).destroy(world);
+				currLevel++;
+				if(currLevel > levels.size-1){
+					currLevel = levels.size -1;
+				}
+				levels.get(currLevel).create(world);
+				time = 0;
+				
+			}
+		}
 		//render.render(world, cam.combined);
 		
 	}
