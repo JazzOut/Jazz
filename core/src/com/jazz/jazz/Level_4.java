@@ -6,9 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
-public class Level_3 extends Level {
+public class Level_4 extends Level {
 
-	public Level_3(){
+	public Level_4(){
 		super();
 	}
 	
@@ -23,24 +23,41 @@ public class Level_3 extends Level {
 		int rowCount = 12;
 		Block block;
 		Vector2 pos = new Vector2();
-		int skip = 2;
-		int[] startSkip = {3,4,5,6,6,5,4,4,5,6,7,7,8,7,7}; 
+		int skip = 1;
+		//int[] startSkip = {3,4,5,6,6,5,4,4,5,6,7,8,8,7,6}; 
 		for (int i = 0; i < columnCount; i++) {
 			for (int j = 0; j < rowCount; j++) {
-				if(j<startSkip[i] || j>(startSkip[i]+skip)) {
-					block = Levels.standardBlockPool.obtain();
-					world = ((StandardBlock) block).init(world,
-					pos.set(i * 15 + 100, j * 15 + 10));
-
-					block.updateModel();
-					activeBlocks.add(block);
+				if((i%4==0)||(i%4==1)||(i%4==2)) {
+					if((j%4==0)||(j%4==1)||(j%4==2)) {
+						if(i<=3){
+							block = Levels.squareBlockPool.obtain();
+							world = ((StandardBlock) block).init(world,
+									pos.set(i * 15 + 110, j * 15 + 20));
+							block.updateModel();
+							activeBlocks.add(block);
+						}
+						else if (i>3&&i<7){
+							block = Levels.standardBlockPool.obtain();
+							world = ((StandardBlock) block).init(world,
+									pos.set(i * 15 + 110, j * 15 + 20));
+							block.updateModel();
+							activeBlocks.add(block);
+						}
+						else{
+							block = Levels.hardBlockPool.obtain();
+							world = ((StandardBlock) block).init(world,
+									pos.set(i * 15 + 110, j * 15 + 20));
+							block.updateModel();
+							activeBlocks.add(block);
+						}
+					}
 				}
 //				else{
 //					block = Levels.hardBlockPool.obtain();
 //					world = ((HardBlock) block).init(world,
 //							pos.set(i * 10 + 100, j * 15 + 10));
 //				}
-
+				
 				
 			}
 		}
