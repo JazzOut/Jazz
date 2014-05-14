@@ -170,7 +170,7 @@ public class JazzGame implements Screen{
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		Gdx.input.setCursorCatched(true);
 		
 	}
 
